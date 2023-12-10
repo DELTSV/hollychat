@@ -12,26 +12,45 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   final int numberOfPostsPerRequest = 10;
 
   PostsBloc({required this.postsRepository}) : super(PostsState()) {
-    on<LoadPostPage>(_onLoadPosts);
+    on<LoadNextPostPage>(_onLoadPosts);
+    on<RefreshPosts>(_onRefreshPosts);
   }
 
-  void _onLoadPosts(LoadPostPage event, Emitter<PostsState> emit) async {
+  void _onLoadPosts(LoadNextPostPage event, Emitter<PostsState> emit) async {
     if (state.status != PostsStatus.loading && state.hasMore) {
       emit(state.copyWith(status: PostsStatus.loading));
 
       try {
         final List<Post> newPosts = await postsRepository
-            .getAllPostsWithPagination(event.page, numberOfPostsPerRequest);
+            .getAllPostsWithPagination(state.nextPage, numberOfPostsPerRequest);
 
         emit(state.copyWith(
           posts: [...state.posts, ...newPosts],
           hasMore: newPosts.length == numberOfPostsPerRequest,
-          nextPage: event.page + 1,
+          nextPage: state.nextPage + 1,
           status: PostsStatus.success,
         ));
       } catch (error) {
         emit(PostsError(errorMessage: "Failed to load posts"));
       }
+    }
+  }
+
+  void _onRefreshPosts(RefreshPosts event, Emitter<PostsState> emit) async {
+    emit(state.copyWith(status: PostsStatus.loading, posts: []));
+
+    try {
+      final List<Post> newPosts = await postsRepository
+          .getAllPostsWithPagination(1, numberOfPostsPerRequest);
+
+      emit(state.copyWith(
+        posts: newPosts,
+        hasMore: newPosts.length == numberOfPostsPerRequest,
+        nextPage: 2,
+        status: PostsStatus.success,
+      ));
+    } catch (error) {
+      emit(PostsError(errorMessage: "Failed to load posts"));
     }
   }
 }

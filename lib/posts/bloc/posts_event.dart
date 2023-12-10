@@ -3,8 +3,6 @@ part of 'posts_bloc.dart';
 @immutable
 abstract class PostsEvent {}
 
-class LoadPostPage extends PostsEvent {
-  final int page;
+class LoadNextPostPage extends PostsEvent {}
 
-  LoadPostPage({required this.page});
-}
+class RefreshPosts extends PostsEvent {}
