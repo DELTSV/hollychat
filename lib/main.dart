@@ -30,6 +30,55 @@ class HollyChatApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          theme: ThemeData(
+            scaffoldBackgroundColor: const Color(0xff131D35),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Color(0xff131D35),
+              elevation: 1,
+            ),
+            cardTheme: const CardTheme(
+              color: Color(0xff1E2A47),
+              elevation: 1,
+            ),
+            textTheme: const TextTheme(
+              titleLarge: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              headlineLarge: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              headlineMedium: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              headlineSmall: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+              bodyLarge: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+              bodyMedium: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+              bodySmall: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          // #131D35
           routes: {
             '/': (context) => const PostsScreen(),
           },

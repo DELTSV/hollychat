@@ -29,14 +29,14 @@ class PostPreview extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(
                   post.author.username,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),
             const SizedBox(height: 10),
             Text(
               post.content,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             if (post.image != null) ...[
               const SizedBox(height: 10),

@@ -39,7 +39,9 @@ class _PostsScreenState extends State<PostsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HollyChat'),
+        title: const Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Image(image: AssetImage('assets/images/logo.png'), height: 30),
+        ]),
       ),
       body: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.anywhere,
@@ -74,7 +76,8 @@ class _PostsScreenState extends State<PostsScreen> {
               controller: _scrollController,
               itemCount: posts.length + (state.hasMore ? 1 : 0),
               separatorBuilder: (context, _) => const SizedBox(height: 10),
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(8.0),
               itemBuilder: (context, index) {
                 if (index == posts.length) {
                   if (state.status == PostsStatus.error) {
