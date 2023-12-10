@@ -91,7 +91,7 @@ class _PostsScreenState extends State<PostsScreen> {
                 final post = posts[index];
 
                 return PostPreview(
-                  body: post.content,
+                  post: post,
                 );
               },
             );
