@@ -189,19 +189,6 @@ class _FullScreenViewerState extends State<FullScreenViewer>
   void initState() {
     super.initState();
 
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemStatusBarContrastEnforced: true,
-        systemNavigationBarColor: Colors.black.withOpacity(0.002),
-        systemNavigationBarDividerColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-    );
-
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-        overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-
     _controllerReset = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -236,6 +223,8 @@ class _FullScreenViewerState extends State<FullScreenViewer>
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       body: Container(
         color: const Color(
           0xff000000,
@@ -252,17 +241,16 @@ class _FullScreenViewerState extends State<FullScreenViewer>
               right: horizontalPosition,
               child: GestureDetector(
                 onDoubleTapDown: (details) => _doubleTap(details),
-                child: Hero(
-                  tag: widget.tag,
-                  child: InteractiveViewer(
+                child: InteractiveViewer(
                     minScale: 1,
                     transformationController: _transformationController,
                     onInteractionStart: _onInteractionStart,
                     onInteractionUpdate: _onInteractionUpdate,
                     onInteractionEnd: _onInteractionEnd,
-                    child: widget.child,
-                  ),
-                ),
+                    child: Hero(
+                      tag: widget.tag,
+                      child: widget.child,
+                    )),
               ),
             ),
             Align(
