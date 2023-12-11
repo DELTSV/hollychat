@@ -45,6 +45,8 @@ class _PostsScreenState extends State<PostsScreen> {
       ),
       body: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        backgroundColor: const Color(0xff1E2A47),
+        color: Colors.white,
         onRefresh: () async {
           final postsBloc = BlocProvider.of<PostsBloc>(context);
           return postsBloc.add(RefreshPosts());

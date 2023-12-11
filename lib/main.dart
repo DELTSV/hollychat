@@ -31,6 +31,8 @@ class HollyChatApp extends StatelessWidget {
         ],
         child: MaterialApp(
           theme: ThemeData(
+            useMaterial3: true,
+            primaryColor: const Color(0xff131D35),
             scaffoldBackgroundColor: const Color(0xff131D35),
             appBarTheme: const AppBarTheme(
               backgroundColor: Color(0xff131D35),
@@ -39,6 +41,9 @@ class HollyChatApp extends StatelessWidget {
             cardTheme: const CardTheme(
               color: Color(0xff1E2A47),
               elevation: 1,
+            ),
+            progressIndicatorTheme: const ProgressIndicatorThemeData(
+              color: Colors.white,
             ),
             textTheme: const TextTheme(
               titleLarge: TextStyle(
@@ -78,7 +83,6 @@ class HollyChatApp extends StatelessWidget {
               ),
             ),
           ),
-          // #131D35
           routes: {
             '/': (context) => const PostsScreen(),
           },
