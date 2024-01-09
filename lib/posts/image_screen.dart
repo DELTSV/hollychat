@@ -1,60 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-const _kRouteDuration = Duration(milliseconds: 300);
-
-class InstaImageViewer extends StatelessWidget {
-  const InstaImageViewer({
-    super.key,
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final UniqueKey tag = UniqueKey();
-    return Hero(
-      tag: tag,
-      child: Stack(
-        children: <Widget>[
-          child,
-          Positioned.fill(
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  Future.delayed(const Duration(milliseconds: 200)).then(
-                    (_) {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          opaque: false,
-                          barrierColor: Colors.white.withOpacity(0),
-                          pageBuilder: (BuildContext context, _, __) {
-                            return FullScreenViewer(
-                              tag: tag,
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FullScreenViewer extends StatefulWidget {
-  const FullScreenViewer({
+class ImageScreen extends StatefulWidget {
+  const ImageScreen({
     super.key,
     required this.child,
     required this.tag,
@@ -64,10 +13,10 @@ class FullScreenViewer extends StatefulWidget {
   final UniqueKey tag;
 
   @override
-  _FullScreenViewerState createState() => _FullScreenViewerState();
+  _ImageScreenState createState() => _ImageScreenState();
 }
 
-class _FullScreenViewerState extends State<FullScreenViewer>
+class _ImageScreenState extends State<ImageScreen>
     with TickerProviderStateMixin {
   double? _initialPositionY = 0;
 
@@ -166,7 +115,7 @@ class _FullScreenViewerState extends State<FullScreenViewer>
       Navigator.of(context).pop();
     } else {
       setState(() {
-        _animationDuration = _kRouteDuration;
+        _animationDuration = const Duration(milliseconds: 300);
         _opacity = 1;
         _positionYDelta = 0;
       });

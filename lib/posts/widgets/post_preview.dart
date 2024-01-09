@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/post.dart';
-import 'insta_image_viewer.dart';
+import 'image_viewer.dart';
 
 class PostPreview extends StatelessWidget {
   const PostPreview({super.key, required this.post});
@@ -41,7 +41,7 @@ class PostPreview extends StatelessWidget {
             ),
             if (post.image != null) ...[
               const SizedBox(height: 10),
-              InstaImageViewer(
+              ImageViewer(
                 child: Image.network(post.image!),
               ),
             ],
