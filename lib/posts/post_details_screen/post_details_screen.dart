@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
+import 'package:hollychat/posts/widgets/post_comment.dart';
 
 import '../../models/minimal_post.dart';
 import '../widgets/post_author.dart';
@@ -27,6 +28,19 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     super.initState();
     final postsBloc = BlocProvider.of<PostDetailsBloc>(context);
     postsBloc.add(LoadPostDetailsById(postId: widget.post.id));
+  }
+
+  Widget _buildSeparator(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Divider(
+          color: Theme.of(context).dividerColor,
+          thickness: 0.3,
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
   }
 
   @override
@@ -56,15 +70,79 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   );
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PostAuthor(author: state.postDetails!.author),
-                      const SizedBox(height: 10),
-                      PostContent(content: state.postDetails!.content, image: state.postDetails!.image),
-                    ],
+                return SingleChildScrollView(
+                  child: Padding(
+                    // only apply padding at the top and bottom
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PostAuthor(author: state.postDetails!.author),
+                              const SizedBox(height: 10),
+                              PostContent(
+                                content: state.postDetails!.content,
+                                image: state.postDetails!.image,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Builder(builder: (context) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildSeparator(context),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Text(
+                                  'Commentaires',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Builder(builder: (context) {
+                                if (state.postDetails!.comments.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                      'Aucun commentaire trouvé pour ce post.',
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  );
+                                }
+
+                                return Column(
+                                  children: [
+                                    ...state.postDetails!.comments
+                                        .map((comment) => Column(
+                                              children: [
+                                                PostCommentPreview(
+                                                  comment: comment,
+                                                ),
+                                                _buildSeparator(context),
+                                              ],
+                                            )),
+                                    Center(
+                                      child: Text(
+                                        'Aucun autre commentaire trouvé.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ],
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 );
               case PostDetailsStatus.error:
