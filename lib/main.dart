@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/models/post.dart';
-import 'package:hollychat/post/post_details_screen.dart';
-import 'package:hollychat/posts/bloc/posts_bloc.dart';
-import 'package:hollychat/posts/posts_screen.dart';
+import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
+import 'package:hollychat/posts/posts_bloc/posts_bloc.dart';
+import 'package:hollychat/posts/posts_screen/posts_screen.dart';
 import 'package:hollychat/posts/services/posts_api_data_source.dart';
 import 'package:hollychat/posts/services/posts_repository.dart';
+
+import 'models/minimal_post.dart';
 
 void main() {
   runApp(const HollyChatApp());
@@ -108,7 +109,7 @@ class HollyChatApp extends StatelessWidget {
             switch (settings.name) {
               case PostDetailsScreen.routeName:
                 final arguments = settings.arguments;
-                if (arguments is Post) {
+                if (arguments is MinimalPost) {
                   content = PostDetailsScreen(post: arguments);
                 }
                 break;

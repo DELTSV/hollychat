@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/models/post.dart';
-import 'package:hollychat/post/post_details_screen.dart';
-import 'package:hollychat/posts/bloc/posts_bloc.dart';
+import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
 import 'package:hollychat/posts/widgets/post_preview.dart';
+
+import '../../models/minimal_post.dart';
+import '../posts_bloc/posts_bloc.dart';
 
 class PostsScreen extends StatefulWidget {
   const PostsScreen({super.key});
@@ -39,7 +41,7 @@ class _PostsScreenState extends State<PostsScreen> {
     _scrollController.dispose();
   }
 
-  void _onProductTap(BuildContext context, Post post) {
+  void _onProductTap(BuildContext context, MinimalPost post) {
     PostDetailsScreen.navigateTo(context, post);
   }
 

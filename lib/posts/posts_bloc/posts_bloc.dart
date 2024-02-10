@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+import '../../models/minimal_post.dart';
 import '../../models/post.dart';
 import '../services/posts_repository.dart';
 
@@ -21,7 +22,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       emit(state.copyWith(status: PostsStatus.loading));
 
       try {
-        final List<Post> newPosts = await postsRepository
+        final List<MinimalPost> newPosts = await postsRepository
             .getAllPostsWithPagination(state.nextPage, numberOfPostsPerRequest);
 
         emit(state.copyWith(
@@ -40,7 +41,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     emit(state.copyWith(status: PostsStatus.loading, posts: []));
 
     try {
-      final List<Post> newPosts = await postsRepository
+      final List<MinimalPost> newPosts = await postsRepository
           .getAllPostsWithPagination(1, numberOfPostsPerRequest);
 
       emit(state.copyWith(

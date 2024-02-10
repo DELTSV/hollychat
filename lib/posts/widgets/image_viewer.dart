@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../image_screen.dart';
+import '../image_screen/image_screen.dart';
 
 class ImageViewer extends StatelessWidget {
   const ImageViewer({

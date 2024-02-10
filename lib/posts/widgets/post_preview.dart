@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hollychat/models/minimal_post.dart';
 
 import '../../models/post.dart';
 import 'image_viewer.dart';
@@ -10,7 +11,7 @@ class PostPreview extends StatelessWidget {
     this.onTap,
   });
 
-  final Post post;
+  final MinimalPost post;
   final VoidCallback? onTap;
 
   @override

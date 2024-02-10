@@ -1,6 +1,6 @@
-import 'package:hollychat/models/post.dart';
+import '../../models/minimal_post.dart';
 
 abstract class PostsDataSource {
-  Future<List<Post>> getAllPostsWithPagination(
+  Future<List<MinimalPost>> getAllPostsWithPagination(
       int pageNumber, int numberOfPostsPerRequest);
 }

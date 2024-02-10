@@ -1,5 +1,6 @@
 import 'package:hollychat/posts/services/posts_data_source.dart';
 
+import '../../models/minimal_post.dart';
 import '../../models/post.dart';
 
 class PostsRepository {
@@ -7,7 +8,7 @@ class PostsRepository {
 
   PostsRepository({required this.postsDataSource});
 
-  Future<List<Post>> getAllPostsWithPagination(
+  Future<List<MinimalPost>> getAllPostsWithPagination(
       int pageNumber, int numberOfPostsPerRequest) async {
     return postsDataSource.getAllPostsWithPagination(
         pageNumber, numberOfPostsPerRequest);
