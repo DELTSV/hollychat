@@ -124,7 +124,7 @@ Voici les différentes features évaluées et les critères d’évaluation asso
     - ~~Appel réseau spécifique pour avoir le détail d’un post à partir d’un ID~~
     - Possibilité de le modifier / supprimer si j’en suis l’auteur
     - Possibilité d’ajouter un post
-    - Affichage des commentaires liés au post
+    - ~~Affichage des commentaires liés au post~~
 - Architecture (3 points)
     - ~~Gestion d’état + séparation UI/logique~~
     - Tests d’intégrations
@@ -132,11 +132,11 @@ Voici les différentes features évaluées et les critères d’évaluation asso
 ### Commentaires (5 points)
 
 - Rendu (2 points)
-    - Affichage des commentaires d’un post
+    - ~~Affichage des commentaires d’un post~~
     - Possibilité de le modifier / supprimer si j’en suis l’auteur
     - Possibilité d’ajouter un commentaire
 - Architecture (3 points)
-    - Gestion d’état + séparation UI/logique
+    - ~~Gestion d’état + séparation UI/logique~~
     - Tests d’intégrations
 
 ### Bonus / Malus
