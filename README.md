@@ -108,14 +108,14 @@ Voici les différentes features évaluées et les critères d’évaluation asso
 ### Liste des posts (5 points)
 
 - Rendu (2 points)
-    - Affichage de la liste des posts
-    - Pas nécessaire d’être connecté
-    - Liste rafraîchissable via “Pull to refresh”
-    - Liste paginée
+    - ~~Affichage de la liste des posts~~
+    - ~~Pas nécessaire d’être connecté~~
+    - ~~Liste rafraîchissable via “Pull to refresh”~~
+    - ~~Liste paginée~~
 - Architecture (3 points)
-    - Gestion d’état + séparation UI/logique
+    - ~~Gestion d’état + séparation UI/logique~~
     - Tests d’intégrations
-    - Gestion de la pagination
+    - ~~Gestion de la pagination~~
 
 ### Détail d’un post + ajout Post (5 points)
 
