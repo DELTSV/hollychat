@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 
 import '../../models/minimal_post.dart';
+import '../widgets/post_author.dart';
+import '../widgets/post_content.dart';
 
 class PostDetailsScreen extends StatefulWidget {
   const PostDetailsScreen({super.key, required this.post});
@@ -48,11 +50,20 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   child: CircularProgressIndicator(),
                 );
               case PostDetailsStatus.success:
-                return Center(
+                if (state.postDetails == null) {
+                  return const Center(
+                    child: Text('Oups, une erreur est survenue.'),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Content: ${state.postDetails?.content}'),
-                      Text('id: ${state.postDetails?.author.id}'),
+                      PostAuthor(author: state.postDetails!.author),
+                      const SizedBox(height: 10),
+                      PostContent(content: state.postDetails!.content, image: state.postDetails!.image),
                     ],
                   ),
                 );
