@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/models/post.dart';
+import 'package:hollychat/post/post_details_screen.dart';
 import 'package:hollychat/posts/bloc/posts_bloc.dart';
 import 'package:hollychat/posts/widgets/post_preview.dart';
 
 class PostsScreen extends StatefulWidget {
   const PostsScreen({super.key});
+
+  static const String routeName = "/";
 
   @override
   State<PostsScreen> createState() => _PostsScreenState();
@@ -33,6 +37,10 @@ class _PostsScreenState extends State<PostsScreen> {
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+  }
+
+  void _onProductTap(BuildContext context, Post post) {
+    PostDetailsScreen.navigateTo(context, post);
   }
 
   @override
@@ -97,6 +105,7 @@ class _PostsScreenState extends State<PostsScreen> {
                   final post = posts[index];
 
                   return PostPreview(
+                    onTap: () => _onProductTap(context, post),
                     post: post,
                   );
                 },
