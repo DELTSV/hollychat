@@ -1,7 +1,7 @@
 import 'package:hollychat/models/post.dart';
 
 class MinimalPost extends Post {
-  final double commentsCount;
+  final int commentsCount;
 
   MinimalPost({
     required super.id,
@@ -19,7 +19,7 @@ class MinimalPost extends Post {
       content: post.content,
       author: post.author,
       image: post.image,
-      commentsCount: double.parse(json['comments_count'].toString()),
+      commentsCount: json['comments_count'],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
 import 'package:hollychat/posts/posts_bloc/posts_bloc.dart';
 import 'package:hollychat/posts/posts_screen/posts_screen.dart';
@@ -42,6 +43,11 @@ class HollyChatApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => PostsBloc(
+              postsRepository: context.read<PostsRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => PostDetailsBloc(
               postsRepository: context.read<PostsRepository>(),
             ),
           ),

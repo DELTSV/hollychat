@@ -1,5 +1,6 @@
 import 'package:hollychat/posts/services/posts_data_source.dart';
 
+import '../../models/full_post.dart';
 import '../../models/minimal_post.dart';
 import '../../models/post.dart';
 
@@ -12,5 +13,9 @@ class PostsRepository {
       int pageNumber, int numberOfPostsPerRequest) async {
     return postsDataSource.getAllPostsWithPagination(
         pageNumber, numberOfPostsPerRequest);
+  }
+
+  Future<FullPost> getPostDetailsById(int postId) async {
+    return postsDataSource.getPostDetailsById(postId);
   }
 }

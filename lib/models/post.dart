@@ -1,7 +1,7 @@
 import 'package:hollychat/models/author.dart';
 
 class Post {
-  final double id;
+  final int id;
   final String content;
   final String? image;
   final Author author;
@@ -15,7 +15,7 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: double.parse(json['id'].toString()),
+      id: json['id'],
       content: json['content'],
       author: Author.fromJson(json['author']),
       image: getImageUrl(json),
