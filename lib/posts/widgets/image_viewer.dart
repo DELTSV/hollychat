@@ -31,7 +31,7 @@ class _ImageViewerState extends State<ImageViewer> {
 
         final height = width / aspectRatio;
 
-        final image = Image.network(
+        final imageWidget = Image.network(
           widget.postImage.url,
           height: height,
           width: width,
@@ -41,18 +41,24 @@ class _ImageViewerState extends State<ImageViewer> {
             ImageChunkEvent? loadingProgress,
           ) {
             if (loadingProgress == null) {
-              return child;
+              return AnimatedOpacity(
+                opacity: isImageLoaded ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 500), // Adjust as needed
+                child: child,
+              );
             }
+
+            final loadProgressValue = loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                : null;
 
             return SizedBox(
               height: height,
               width: width,
               child: Center(
                 child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
+                  value: loadProgressValue,
                 ),
               ),
             );
@@ -60,21 +66,22 @@ class _ImageViewerState extends State<ImageViewer> {
         );
 
         if (!isImageLoaded) {
-          image.image.resolve(const ImageConfiguration()).addListener(
+          imageWidget.image.resolve(const ImageConfiguration()).addListener(
             ImageStreamListener(
               (ImageInfo image, bool synchronousCall) {
                 if (mounted) {
-                  WidgetsBinding.instance
-                      .addPostFrameCallback((_) => setState(() {
-                            isImageLoaded = true;
-                          }));
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => setState(() {
+                      isImageLoaded = true;
+                    }),
+                  );
                 }
               },
             ),
           );
         }
 
-        return image;
+        return imageWidget;
       },
     );
 
@@ -117,6 +124,61 @@ class _ImageViewerState extends State<ImageViewer> {
           }),
         ],
       ),
+    );
+  }
+}
+
+class FadeInImageAnimation extends StatefulWidget {
+  final String imageUrl;
+  final double width;
+  final double height;
+  final Duration duration;
+
+  const FadeInImageAnimation({
+    required this.imageUrl,
+    required this.width,
+    required this.height,
+    this.duration = const Duration(milliseconds: 500),
+  });
+
+  @override
+  _FadeInImageAnimationState createState() => _FadeInImageAnimationState();
+}
+
+class _FadeInImageAnimationState extends State<FadeInImageAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(duration: widget.duration, vsync: this);
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _animation.value,
+          child: Image.network(
+            widget.imageUrl,
+            width: widget.width,
+            height: widget.height,
+            fit: BoxFit.cover,
+          ),
+        );
+      },
     );
   }
 }
