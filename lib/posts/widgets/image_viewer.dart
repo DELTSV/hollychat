@@ -43,7 +43,7 @@ class _ImageViewerState extends State<ImageViewer> {
             if (loadingProgress == null) {
               return AnimatedOpacity(
                 opacity: isImageLoaded ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 500), // Adjust as needed
+                duration: const Duration(milliseconds: 200), // Adjust as needed
                 child: child,
               );
             }
@@ -124,61 +124,6 @@ class _ImageViewerState extends State<ImageViewer> {
           }),
         ],
       ),
-    );
-  }
-}
-
-class FadeInImageAnimation extends StatefulWidget {
-  final String imageUrl;
-  final double width;
-  final double height;
-  final Duration duration;
-
-  const FadeInImageAnimation({
-    required this.imageUrl,
-    required this.width,
-    required this.height,
-    this.duration = const Duration(milliseconds: 500),
-  });
-
-  @override
-  _FadeInImageAnimationState createState() => _FadeInImageAnimationState();
-}
-
-class _FadeInImageAnimationState extends State<FadeInImageAnimation>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(duration: widget.duration, vsync: this);
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Opacity(
-          opacity: _animation.value,
-          child: Image.network(
-            widget.imageUrl,
-            width: widget.width,
-            height: widget.height,
-            fit: BoxFit.cover,
-          ),
-        );
-      },
     );
   }
 }
