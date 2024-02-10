@@ -120,13 +120,13 @@ Voici les différentes features évaluées et les critères d’évaluation asso
 ### Détail d’un post + ajout Post (5 points)
 
 - Rendu (2 points)
-    - Affichage du détail au clique sur un post
-    - Appel réseau spécifique pour avoir le détail d’un post à partir d’un ID
+    - ~~Affichage du détail au clique sur un post~~
+    - ~~Appel réseau spécifique pour avoir le détail d’un post à partir d’un ID~~
     - Possibilité de le modifier / supprimer si j’en suis l’auteur
     - Possibilité d’ajouter un post
     - Affichage des commentaires liés au post
 - Architecture (3 points)
-    - Gestion d’état + séparation UI/logique
+    - ~~Gestion d’état + séparation UI/logique~~
     - Tests d’intégrations
 
 ### Commentaires (5 points)

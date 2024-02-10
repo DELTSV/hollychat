@@ -29,12 +29,17 @@ class _ImageViewerState extends State<ImageViewer> {
         double width = constraints.maxWidth;
         final aspectRatio = widget.postImage.width / widget.postImage.height;
 
-        final height = width / aspectRatio;
+        double height = width / aspectRatio;
+
+        if (height > 300) {
+          height = 300;
+        }
 
         final imageWidget = Image.network(
           widget.postImage.url,
           height: height,
           width: width,
+          fit: BoxFit.contain,
           loadingBuilder: (
             BuildContext context,
             Widget child,
@@ -110,7 +115,10 @@ class _ImageViewerState extends State<ImageViewer> {
                             pageBuilder: (BuildContext context, _, __) {
                               return ImageScreen(
                                 tag: tag,
-                                child: image,
+                                child: Image.network(
+                                  widget.postImage.url,
+                                  fit: BoxFit.contain,
+                                ),
                               );
                             },
                           ),
