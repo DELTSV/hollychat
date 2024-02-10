@@ -31,7 +31,7 @@ class _ImageViewerState extends State<ImageViewer> {
 
         final height = width / aspectRatio;
 
-        return Image.network(
+        final image = Image.network(
           widget.postImage.url,
           height: height,
           width: width,
@@ -42,16 +42,6 @@ class _ImageViewerState extends State<ImageViewer> {
           ) {
             if (loadingProgress == null) {
               return child;
-            }
-
-            // check if the image is loaded
-            if (loadingProgress.cumulativeBytesLoaded ==
-                loadingProgress.expectedTotalBytes) {
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => setState(() {
-                  isImageLoaded = true;
-                }),
-              );
             }
 
             return SizedBox(
@@ -68,6 +58,23 @@ class _ImageViewerState extends State<ImageViewer> {
             );
           },
         );
+
+        if (!isImageLoaded) {
+          image.image.resolve(const ImageConfiguration()).addListener(
+            ImageStreamListener(
+              (ImageInfo image, bool synchronousCall) {
+                if (mounted) {
+                  WidgetsBinding.instance
+                      .addPostFrameCallback((_) => setState(() {
+                            isImageLoaded = true;
+                          }));
+                }
+              },
+            ),
+          );
+        }
+
+        return image;
       },
     );
 
