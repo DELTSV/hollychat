@@ -111,35 +111,32 @@ class HollyChatApp extends StatelessWidget {
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
           },
-          onGenerateRoute: (settings) {
-            switch (settings.name) {
-              case PostDetailsScreen.routeName:
-                final arguments = settings.arguments;
-                Widget content = const SizedBox();
-                if (arguments is MinimalPost) {
-                  content = PostDetailsScreen(post: arguments);
-                }
-
-                return _createPostRoute(content);
-              case ImageScreen.routeName:
-                final arguments = settings.arguments;
-                Widget content = const SizedBox();
-
-                if (arguments is List) {
-                  final tag = arguments[0] as UniqueKey;
-                  final postImage = arguments[1] as PostImage;
-                  content = ImageScreen(postImage: postImage, tag: tag);
-                }
-
-                return _createImageRoute(content);
-            }
-
-            return null;
-          },
+          onGenerateRoute: _getRoute,
         ),
       ),
     );
   }
+}
+
+Route? _getRoute(RouteSettings settings) {
+  switch (settings.name) {
+    case PostDetailsScreen.routeName:
+      final arguments = settings.arguments;
+      if (arguments is MinimalPost) {
+        return _createPostRoute(PostDetailsScreen(post: arguments));
+      }
+      break;
+    case ImageScreen.routeName:
+      final arguments = settings.arguments;
+      if (arguments is Map) {
+        final tag = arguments['tag'] as UniqueKey;
+        final postImage = arguments['postImage'] as PostImage;
+        return _createImageRoute(ImageScreen(postImage: postImage, tag: tag));
+      }
+      break;
+  }
+
+  return null;
 }
 
 Route _createImageRoute(final Widget content) {

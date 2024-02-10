@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hollychat/models/minimal_post.dart';
+import 'package:hollychat/posts/widgets/post_author.dart';
+import 'package:hollychat/posts/widgets/post_content.dart';
 
 import 'image_viewer.dart';
 
@@ -25,39 +27,13 @@ class PostPreview extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          // Display the post header with profile picture and username
-          // Also display the post body with an optional image
           padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Display the post header with profile picture and username
-              // Also display the post body with an optional image
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(
-                        'https://api.dicebear.com/7.x/personas/png?seed=${post.author.id}'),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    post.author.username,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ],
-              ),
+              PostAuthor(author: post.author),
               const SizedBox(height: 10),
-              Text(
-                post.content,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              if (post.image != null) ...[
-                const SizedBox(height: 10),
-                ImageViewer(
-                  postImage: post.image!,
-                ),
-              ],
+              PostContent(content: post.content, image: post.image),
             ],
           ),
         ),

@@ -12,8 +12,15 @@ class ImageScreen extends StatefulWidget {
 
   static const String routeName = "/image";
 
-  static void navigateTo(BuildContext context, UniqueKey tag, PostImage postImage) {
-    Navigator.of(context).pushNamed(routeName, arguments: [tag, postImage]);
+  static void navigateTo(
+    BuildContext context,
+    UniqueKey tag,
+    PostImage postImage,
+  ) {
+    Navigator.of(context).pushNamed(routeName, arguments: {
+      'tag': tag,
+      'postImage': postImage,
+    });
   }
 
   final PostImage postImage;
