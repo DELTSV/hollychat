@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hollychat/models/minimal_post.dart';
 
-import '../../models/post.dart';
 import 'image_viewer.dart';
 
 class PostPreview extends StatelessWidget {
@@ -56,7 +55,7 @@ class PostPreview extends StatelessWidget {
               if (post.image != null) ...[
                 const SizedBox(height: 10),
                 ImageViewer(
-                  child: Image.network(post.image!),
+                  postImage: post.image!,
                 ),
               ],
             ],
