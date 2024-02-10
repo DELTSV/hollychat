@@ -20,6 +20,10 @@ class ImageViewer extends StatefulWidget {
 class _ImageViewerState extends State<ImageViewer> {
   bool isImageLoaded = false;
 
+  void _onImageTap(BuildContext context, UniqueKey tag, PostImage post) {
+    ImageScreen.navigateTo(context, tag, post);
+  }
+
   @override
   Widget build(BuildContext context) {
     final UniqueKey tag = UniqueKey();
@@ -106,24 +110,7 @@ class _ImageViewerState extends State<ImageViewer> {
                 child: InkWell(
                   onTap: () {
                     Future.delayed(const Duration(milliseconds: 200)).then(
-                      (_) {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            opaque: false,
-                            barrierColor: Colors.white.withOpacity(0),
-                            pageBuilder: (BuildContext context, _, __) {
-                              return ImageScreen(
-                                tag: tag,
-                                child: Image.network(
-                                  widget.postImage.url,
-                                  fit: BoxFit.contain,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
+                      (_) => _onImageTap(context, tag, widget.postImage),
                     );
                   },
                 ),

@@ -9,8 +9,8 @@ class PostDetailsScreen extends StatefulWidget {
 
   static const String routeName = "/post-details";
 
-  static void navigateTo(BuildContext context, MinimalPost product) {
-    Navigator.of(context).pushNamed(routeName, arguments: product);
+  static void navigateTo(BuildContext context, MinimalPost post) {
+    Navigator.of(context).pushNamed(routeName, arguments: post);
   }
 
   final MinimalPost post;

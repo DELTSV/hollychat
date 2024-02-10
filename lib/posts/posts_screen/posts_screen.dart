@@ -40,7 +40,7 @@ class _PostsScreenState extends State<PostsScreen> {
     _scrollController.dispose();
   }
 
-  void _onProductTap(BuildContext context, MinimalPost post) {
+  void _onPostTap(BuildContext context, MinimalPost post) {
     PostDetailsScreen.navigateTo(context, post);
   }
 
@@ -106,7 +106,7 @@ class _PostsScreenState extends State<PostsScreen> {
                   final post = posts[index];
 
                   return PostPreview(
-                    onTap: () => _onProductTap(context, post),
+                    onTap: () => _onPostTap(context, post),
                     post: post,
                   );
                 },

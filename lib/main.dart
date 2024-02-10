@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/posts/image_screen/image_screen.dart';
 import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
 import 'package:hollychat/posts/posts_bloc/posts_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:hollychat/posts/services/posts_api_data_source.dart';
 import 'package:hollychat/posts/services/posts_repository.dart';
 
 import 'models/minimal_post.dart';
+import 'models/post_image.dart';
 
 void main() {
   runApp(const HollyChatApp());
@@ -110,18 +112,29 @@ class HollyChatApp extends StatelessWidget {
             PostsScreen.routeName: (context) => const PostsScreen(),
           },
           onGenerateRoute: (settings) {
-            Widget content = const SizedBox();
-
             switch (settings.name) {
               case PostDetailsScreen.routeName:
                 final arguments = settings.arguments;
+                Widget content = const SizedBox();
                 if (arguments is MinimalPost) {
                   content = PostDetailsScreen(post: arguments);
                 }
-                break;
+
+                return _createPostRoute(content);
+              case ImageScreen.routeName:
+                final arguments = settings.arguments;
+                Widget content = const SizedBox();
+
+                if (arguments is List) {
+                  final tag = arguments[0] as UniqueKey;
+                  final postImage = arguments[1] as PostImage;
+                  content = ImageScreen(postImage: postImage, tag: tag);
+                }
+
+                return _createImageRoute(content);
             }
 
-            return _createRoute(content);
+            return null;
           },
         ),
       ),
@@ -129,7 +142,17 @@ class HollyChatApp extends StatelessWidget {
   }
 }
 
-Route _createRoute(final Widget content) {
+Route _createImageRoute(final Widget content) {
+  return PageRouteBuilder(
+    opaque: false,
+    barrierColor: Colors.white.withOpacity(0),
+    pageBuilder: (BuildContext context, _, __) {
+      return content;
+    },
+  );
+}
+
+Route _createPostRoute(final Widget content) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => content,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
