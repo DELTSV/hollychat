@@ -43,64 +43,66 @@ class _PostsScreenState extends State<PostsScreen> {
           Image(image: AssetImage('assets/images/logo.png'), height: 30),
         ]),
       ),
-      body: RefreshIndicator(
-        triggerMode: RefreshIndicatorTriggerMode.anywhere,
-        backgroundColor: const Color(0xff1E2A47),
-        color: Colors.white,
-        onRefresh: () async {
-          final postsBloc = BlocProvider.of<PostsBloc>(context);
-          return postsBloc.add(RefreshPosts());
-        },
-        child: BlocBuilder<PostsBloc, PostsState>(
-          builder: (context, state) {
-            if (state.posts.isEmpty) {
-              switch (state.status) {
-                case PostsStatus.initial:
-                  return const SizedBox();
-                case PostsStatus.loading:
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                case PostsStatus.error:
-                  return const Center(
-                    child: Text('Oups, une erreur est survenue.'),
-                  );
-                case PostsStatus.success:
-                  return const Center(
-                    child: Text('Aucun post trouvé.'),
-                  );
-              }
-            }
-
-            final posts = state.posts;
-
-            return ListView.separated(
-              controller: _scrollController,
-              itemCount: posts.length + (state.hasMore ? 1 : 0),
-              separatorBuilder: (context, _) => const SizedBox(height: 10),
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(8.0),
-              itemBuilder: (context, index) {
-                if (index == posts.length) {
-                  if (state.status == PostsStatus.error) {
-                    return const Center(
-                      child: Text('Oups, une erreur est survenue.'),
-                    );
-                  } else {
+      body: SafeArea(
+        child: RefreshIndicator(
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          backgroundColor: const Color(0xff1E2A47),
+          color: Colors.white,
+          onRefresh: () async {
+            final postsBloc = BlocProvider.of<PostsBloc>(context);
+            return postsBloc.add(RefreshPosts());
+          },
+          child: BlocBuilder<PostsBloc, PostsState>(
+            builder: (context, state) {
+              if (state.posts.isEmpty) {
+                switch (state.status) {
+                  case PostsStatus.initial:
+                    return const SizedBox();
+                  case PostsStatus.loading:
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  }
+                  case PostsStatus.error:
+                    return const Center(
+                      child: Text('Oups, une erreur est survenue.'),
+                    );
+                  case PostsStatus.success:
+                    return const Center(
+                      child: Text('Aucun post trouvé.'),
+                    );
                 }
+              }
 
-                final post = posts[index];
+              final posts = state.posts;
 
-                return PostPreview(
-                  post: post,
-                );
-              },
-            );
-          },
+              return ListView.separated(
+                controller: _scrollController,
+                itemCount: posts.length + (state.hasMore ? 1 : 0),
+                separatorBuilder: (context, _) => const SizedBox(height: 10),
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(8.0),
+                itemBuilder: (context, index) {
+                  if (index == posts.length) {
+                    if (state.status == PostsStatus.error) {
+                      return const Center(
+                        child: Text('Oups, une erreur est survenue.'),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }
+
+                  final post = posts[index];
+
+                  return PostPreview(
+                    post: post,
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

@@ -191,15 +191,16 @@ class _ImageScreenState extends State<ImageScreen>
               child: GestureDetector(
                 onDoubleTapDown: (details) => _doubleTap(details),
                 child: InteractiveViewer(
-                    minScale: 1,
-                    transformationController: _transformationController,
-                    onInteractionStart: _onInteractionStart,
-                    onInteractionUpdate: _onInteractionUpdate,
-                    onInteractionEnd: _onInteractionEnd,
-                    child: Hero(
-                      tag: widget.tag,
-                      child: widget.child,
-                    )),
+                  minScale: 1,
+                  transformationController: _transformationController,
+                  onInteractionStart: _onInteractionStart,
+                  onInteractionUpdate: _onInteractionUpdate,
+                  onInteractionEnd: _onInteractionEnd,
+                  child: Hero(
+                    tag: widget.tag,
+                    child: widget.child,
+                  ),
+                ),
               ),
             ),
             Align(
