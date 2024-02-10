@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/posts/bloc/posts_bloc.dart';
 import 'package:hollychat/posts/widgets/post_preview.dart';
 
