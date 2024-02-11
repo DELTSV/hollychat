@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
+import 'package:hollychat/posts/galery_screen/galery_screen.dart';
 import 'package:hollychat/posts/image_screen/image_screen.dart';
 import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
@@ -107,6 +109,7 @@ class HollyChatApp extends StatelessWidget {
           ),
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
+            ImageGalleryScreen.routeName: (context) => const ImageGalleryScreen(),
           },
           onGenerateRoute: _getRoute,
         ),
@@ -131,6 +134,8 @@ Route? _getRoute(RouteSettings settings) {
         return _createImageRoute(ImageScreen(postImage: postImage, tag: tag));
       }
       break;
+    case AddPostScreen.routeName:
+      return _createAddPostRoute(const AddPostScreen());
   }
 
   return null;
@@ -142,6 +147,24 @@ Route _createImageRoute(final Widget content) {
     barrierColor: Colors.white.withOpacity(0),
     pageBuilder: (BuildContext context, _, __) {
       return content;
+    },
+  );
+}
+
+Route _createAddPostRoute(final Widget content) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => content,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0, 1);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
     },
   );
 }

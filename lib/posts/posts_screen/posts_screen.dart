@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
 import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
 import 'package:hollychat/posts/widgets/post_preview.dart';
 
@@ -52,6 +53,12 @@ class _PostsScreenState extends State<PostsScreen> {
         title: const Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Image(image: AssetImage('assets/images/logo.png'), height: 30),
         ]),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
+        tooltip: 'Ajouter un post',
+        onPressed: () => AddPostScreen.navigateTo(context),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
       body: SafeArea(
         child: RefreshIndicator(
