@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
-import 'package:hollychat/posts/galery_screen/galery_screen.dart';
+import 'package:hollychat/posts/galery_screen/gallery_screen.dart';
 import 'package:hollychat/posts/image_screen/image_screen.dart';
 import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
@@ -109,7 +111,6 @@ class HollyChatApp extends StatelessWidget {
           ),
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
-            ImageGalleryScreen.routeName: (context) => const ImageGalleryScreen(),
           },
           onGenerateRoute: _getRoute,
         ),
@@ -136,6 +137,13 @@ Route? _getRoute(RouteSettings settings) {
       break;
     case AddPostScreen.routeName:
       return _createAddPostRoute(const AddPostScreen());
+    case GalleryScreen.routeName:
+      final arguments = settings.arguments;
+      if (arguments is List) {
+        final imageList = arguments.cast<File>();
+        return _createAddPostRoute(GalleryScreen(imageList: imageList));
+      }
+      break;
   }
 
   return null;
