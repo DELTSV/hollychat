@@ -4,6 +4,7 @@ import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
 import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
 import 'package:hollychat/posts/widgets/post_preview.dart';
 
+import '../../auth/bloc/auth_bloc.dart';
 import '../../models/minimal_post.dart';
 import '../posts_bloc/posts_bloc.dart';
 import '../widgets/post_separator.dart';
@@ -50,8 +51,16 @@ class _PostsScreenState extends State<PostsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Image(image: AssetImage('assets/images/logo.png'), height: 30),
+        title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Image(image: AssetImage('assets/images/logo.png'), height: 30),
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) => TextButton(
+              onPressed: () => print(state.auth),
+              child: Text(
+                state.isNotAuthenticated ? "Connexion" : state.auth!.user.name,
+              ),
+            ),
+          ),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
