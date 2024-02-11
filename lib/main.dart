@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/auth/bloc/auth_bloc.dart';
+import 'package:hollychat/auth/screens/sign_up_screen.dart';
+import 'package:hollychat/auth/services/auth_data_source.dart';
+import 'package:hollychat/auth/services/auth_repository.dart';
 import 'package:hollychat/posts/bloc/posts_bloc.dart';
 import 'package:hollychat/posts/posts_screen.dart';
 import 'package:hollychat/posts/services/posts_api_data_source.dart';
@@ -27,6 +31,7 @@ class HollyChatApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,
     );
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     return MultiRepositoryProvider(
       providers: [
@@ -34,12 +39,23 @@ class HollyChatApp extends StatelessWidget {
           create: (context) =>
               PostsRepository(postsDataSource: PostsApiDataSource()),
         ),
+        RepositoryProvider(
+          create: (context) =>
+              AuthRepository(authDataSource: AuthApiDataSource()),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => PostsBloc(
               postsRepository: context.read<PostsRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => AuthBloc(
+              authRepository: context.read<AuthRepository>(),
+              noAuthCallback: () =>
+                  navigatorKey.currentState!.pushNamed('/signup'),
             ),
           ),
         ],
@@ -99,7 +115,9 @@ class HollyChatApp extends StatelessWidget {
           ),
           routes: {
             '/': (context) => const PostsScreen(),
+            '/signup': (context) => const SignUpScreen(),
           },
+          navigatorKey: navigatorKey,
         ),
       ),
     );
