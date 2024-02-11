@@ -17,4 +17,14 @@ class AuthRepository {
       password,
     );
   }
+
+  Future<Auth> login(
+    String email,
+    String password,
+  ) async {
+    return authDataSource.login(
+      email,
+      password,
+    );
+  }
 }

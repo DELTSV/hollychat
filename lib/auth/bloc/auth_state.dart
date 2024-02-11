@@ -18,5 +18,6 @@ class AuthState {
     return _auth;
   }
 
-  bool get isAuthenticated => auth != null;
+  bool get isAuthenticated => _auth != null;
+  bool get isNotAuthenticated => _auth == null;
 }

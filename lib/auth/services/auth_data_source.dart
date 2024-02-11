@@ -7,10 +7,19 @@ abstract class AuthDataSource {
     String email,
     String password,
   );
+
+  Future<Auth> login(
+    String email,
+    String password,
+  );
 }
 
 class AuthApiDataSource extends AuthDataSource {
-  final String baseUrl = 'https://xoc1-kd2t-7p9b.n7c.xano.io/api:xbcc5VEi/auth';
+  final _dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://xoc1-kd2t-7p9b.n7c.xano.io/api:xbcc5VEi/auth',
+    ),
+  );
 
   @override
   Future<Auth> signUp(
@@ -18,15 +27,25 @@ class AuthApiDataSource extends AuthDataSource {
     String email,
     String password,
   ) async {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-      ),
-    );
-
     try {
-      final response = await dio.post('/post', data: {
+      final response = await _dio.post('/signup', data: {
         'name': name,
+        'email': email,
+        'password': password,
+      });
+      return Auth.fromJson(response.data as Map<String, dynamic>);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Auth> login(
+    String email,
+    String password,
+  ) async {
+    try {
+      final response = await _dio.post('/login', data: {
         'email': email,
         'password': password,
       });

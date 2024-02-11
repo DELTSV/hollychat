@@ -14,12 +14,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           noAuthCallback: noAuthCallback,
         )) {
     on<SignUp>(_onSigningUp);
+    on<Login>(_onLogin);
   }
 
   void _onSigningUp(SignUp event, Emitter<AuthState> emit) async {
     try {
       final auth = await authRepository.signUp(
         event.name,
+        event.email,
+        event.password,
+      );
+      emit(state.withNewAuth(auth));
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  void _onLogin(Login event, Emitter<AuthState> emit) async {
+    try {
+      final auth = await authRepository.login(
         event.email,
         event.password,
       );

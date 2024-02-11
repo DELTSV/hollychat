@@ -40,8 +40,16 @@ class _PostsScreenState extends State<PostsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Image(image: AssetImage('assets/images/logo.png'), height: 30),
+        title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Image(image: AssetImage('assets/images/logo.png'), height: 30),
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) => TextButton(
+              onPressed: () => print(state.auth),
+              child: Text(
+                state.isNotAuthenticated ? "Connexion" : state.auth!.user.name,
+              ),
+            ),
+          ),
         ]),
       ),
       body: RefreshIndicator(
