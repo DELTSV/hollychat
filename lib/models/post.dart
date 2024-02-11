@@ -1,26 +1,14 @@
-class PostAuthor {
-  final String username;
-  final int id;
-
-  const PostAuthor({
-    required this.username,
-    required this.id,
-  });
-
-  factory PostAuthor.fromJson(Map<String, dynamic> json) {
-    return PostAuthor(
-      username: json['name'],
-      id: json['id'],
-    );
-  }
-}
+import 'package:hollychat/models/author.dart';
+import 'package:hollychat/models/post_image.dart';
 
 class Post {
+  final int id;
   final String content;
-  final String? image;
-  final PostAuthor author;
+  final PostImage? image;
+  final Author author;
 
   const Post({
+    required this.id,
     required this.content,
     required this.author,
     this.image,
@@ -28,13 +16,10 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
+      id: json['id'],
       content: json['content'],
-      author: PostAuthor.fromJson(json['author']),
-      image: getImageUrl(json),
+      author: Author.fromJson(json['author']),
+      image: json['image'] == null ? null : PostImage.fromJson(json['image']),
     );
-  }
-
-  static String? getImageUrl(Map<String, dynamic> json) {
-    return json['image'] == null ? null : json['image']['url'];
   }
 }

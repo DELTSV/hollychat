@@ -1,15 +1,29 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hollychat/models/post_image.dart';
 
 class ImageScreen extends StatefulWidget {
   const ImageScreen({
     super.key,
-    required this.child,
+    required this.postImage,
     required this.tag,
   });
 
-  final Widget child;
+  static const String routeName = "/image";
+
+  static void navigateTo(
+    BuildContext context,
+    UniqueKey tag,
+    PostImage postImage,
+  ) {
+    Navigator.of(context).pushNamed(routeName, arguments: {
+      'tag': tag,
+      'postImage': postImage,
+    });
+  }
+
+  final PostImage postImage;
   final UniqueKey tag;
 
   @override
@@ -198,7 +212,10 @@ class _ImageScreenState extends State<ImageScreen>
                   onInteractionEnd: _onInteractionEnd,
                   child: Hero(
                     tag: widget.tag,
-                    child: widget.child,
+                    child: Image.network(
+                      widget.postImage.url,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),

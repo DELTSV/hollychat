@@ -8,7 +8,7 @@ enum PostsStatus {
 }
 
 class PostsState {
-  final List<Post> posts;
+  final List<MinimalPost> posts;
   final bool hasMore;
   final int nextPage;
   final PostsStatus status;
@@ -21,7 +21,7 @@ class PostsState {
   });
 
   PostsState copyWith({
-    List<Post>? posts,
+    List<MinimalPost>? posts,
     bool? hasMore,
     int? nextPage,
     PostsStatus? status,

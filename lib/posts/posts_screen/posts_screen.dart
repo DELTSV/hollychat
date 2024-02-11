@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/auth/bloc/auth_bloc.dart';
-import 'package:hollychat/posts/bloc/posts_bloc.dart';
+import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
+import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
 import 'package:hollychat/posts/widgets/post_preview.dart';
+
+import '../../auth/bloc/auth_bloc.dart';
+import '../../models/minimal_post.dart';
+import '../posts_bloc/posts_bloc.dart';
+import '../widgets/post_separator.dart';
 
 class PostsScreen extends StatefulWidget {
   const PostsScreen({super.key});
+
+  static const String routeName = "/";
 
   @override
   State<PostsScreen> createState() => _PostsScreenState();
@@ -36,6 +43,10 @@ class _PostsScreenState extends State<PostsScreen> {
     _scrollController.dispose();
   }
 
+  void _onPostTap(BuildContext context, MinimalPost post) {
+    PostDetailsScreen.navigateTo(context, post);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +62,12 @@ class _PostsScreenState extends State<PostsScreen> {
             ),
           ),
         ]),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
+        tooltip: 'Ajouter un post',
+        onPressed: () => AddPostScreen.navigateTo(context),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
       body: SafeArea(
         child: RefreshIndicator(
@@ -87,9 +104,8 @@ class _PostsScreenState extends State<PostsScreen> {
               return ListView.separated(
                 controller: _scrollController,
                 itemCount: posts.length + (state.hasMore ? 1 : 0),
-                separatorBuilder: (context, _) => const SizedBox(height: 10),
+                separatorBuilder: (context, _) => const PostSeparator(),
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(8.0),
                 itemBuilder: (context, index) {
                   if (index == posts.length) {
                     if (state.status == PostsStatus.error) {
@@ -106,6 +122,7 @@ class _PostsScreenState extends State<PostsScreen> {
                   final post = posts[index];
 
                   return PostPreview(
+                    onTap: () => _onPostTap(context, post),
                     post: post,
                   );
                 },
