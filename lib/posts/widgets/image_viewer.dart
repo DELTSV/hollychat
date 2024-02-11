@@ -19,6 +19,7 @@ class ImageViewer extends StatefulWidget {
 
 class _ImageViewerState extends State<ImageViewer> {
   bool isImageLoaded = false;
+  bool displayBorder = false;
 
   void _onImageTap(BuildContext context, UniqueKey tag, PostImage post) {
     ImageScreen.navigateTo(context, tag, post);
@@ -30,19 +31,29 @@ class _ImageViewerState extends State<ImageViewer> {
 
     final image = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        double width = constraints.maxWidth;
+        double containerWidth = constraints.maxWidth;
         final aspectRatio = widget.postImage.width / widget.postImage.height;
 
-        double height = width / aspectRatio;
+        double height = containerWidth / aspectRatio;
 
         if (height > 300) {
           height = 300;
         }
 
+        double width = height * aspectRatio;
+
+        if (width < containerWidth && displayBorder == false) {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => setState(() {
+              displayBorder = true;
+            }),
+          );
+        }
+
         final imageWidget = Image.network(
           widget.postImage.url,
           height: height,
-          width: width,
+          width: containerWidth,
           fit: BoxFit.contain,
           loadingBuilder: (
             BuildContext context,
@@ -64,7 +75,7 @@ class _ImageViewerState extends State<ImageViewer> {
 
             return SizedBox(
               height: height,
-              width: width,
+              width: containerWidth,
               child: Center(
                 child: CircularProgressIndicator(
                   value: loadProgressValue,
@@ -94,11 +105,26 @@ class _ImageViewerState extends State<ImageViewer> {
       },
     );
 
-    return Hero(
-      tag: tag,
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(15.0),
+        border: displayBorder
+            ? Border.all(
+                color: Colors.white.withAlpha(50),
+                width: 0.5,
+              )
+            : null,
+      ),
       child: Stack(
         children: <Widget>[
-          image,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: Hero(
+              tag: tag,
+              child: image,
+            ),
+          ),
           Builder(builder: (context) {
             if (!isImageLoaded) {
               return const SizedBox();
@@ -108,6 +134,9 @@ class _ImageViewerState extends State<ImageViewer> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
                   onTap: () {
                     Future.delayed(const Duration(milliseconds: 200)).then(
                       (_) => _onImageTap(context, tag, widget.postImage),

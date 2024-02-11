@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/widgets/post_comment.dart';
+import 'package:hollychat/posts/widgets/post_separator.dart';
 
 import '../../models/minimal_post.dart';
 import '../widgets/post_author.dart';
@@ -28,19 +29,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     super.initState();
     final postsBloc = BlocProvider.of<PostDetailsBloc>(context);
     postsBloc.add(LoadPostDetailsById(postId: widget.post.id));
-  }
-
-  Widget _buildSeparator(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 0.3,
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
   }
 
   @override
@@ -95,7 +83,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildSeparator(context),
+                              const PostSeparator(padding: 10),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 15),
@@ -124,7 +112,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                                 PostCommentPreview(
                                                   comment: comment,
                                                 ),
-                                                _buildSeparator(context),
+                                                const PostSeparator(padding: 10),
                                               ],
                                             )),
                                     Center(

@@ -58,13 +58,10 @@ class HollyChatApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
             primaryColor: const Color(0xff131D35),
+            cardColor: const Color(0xff1E2A47),
             scaffoldBackgroundColor: const Color(0xff131D35),
             appBarTheme: const AppBarTheme(
               backgroundColor: Color(0xff131D35),
-              elevation: 1,
-            ),
-            cardTheme: const CardTheme(
-              color: Color(0xff1E2A47),
               elevation: 1,
             ),
             progressIndicatorTheme: const ProgressIndicatorThemeData(

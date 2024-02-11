@@ -5,6 +5,7 @@ import 'package:hollychat/posts/widgets/post_preview.dart';
 
 import '../../models/minimal_post.dart';
 import '../posts_bloc/posts_bloc.dart';
+import '../widgets/post_separator.dart';
 
 class PostsScreen extends StatefulWidget {
   const PostsScreen({super.key});
@@ -87,9 +88,8 @@ class _PostsScreenState extends State<PostsScreen> {
               return ListView.separated(
                 controller: _scrollController,
                 itemCount: posts.length + (state.hasMore ? 1 : 0),
-                separatorBuilder: (context, _) => const SizedBox(height: 10),
+                separatorBuilder: (context, _) => const PostSeparator(),
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(8.0),
                 itemBuilder: (context, index) {
                   if (index == posts.length) {
                     if (state.status == PostsStatus.error) {
