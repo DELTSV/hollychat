@@ -9,7 +9,9 @@ class PostsApiDataSource extends PostsDataSource {
 
   @override
   Future<List<MinimalPost>> getAllPostsWithPagination(
-      int pageNumber, int numberOfPostsPerRequest) async {
+    int pageNumber,
+    int numberOfPostsPerRequest,
+  ) async {
     final dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,

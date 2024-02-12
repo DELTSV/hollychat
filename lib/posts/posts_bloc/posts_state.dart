@@ -35,9 +35,3 @@ class PostsState {
     );
   }
 }
-
-class PostsError extends PostsState {
-  final String errorMessage;
-
-  PostsError({required this.errorMessage}) : super();
-}

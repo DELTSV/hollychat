@@ -32,7 +32,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
           status: PostsStatus.success,
         ));
       } catch (error) {
-        emit(PostsError(errorMessage: "Failed to load posts"));
+        emit(state.copyWith(status: PostsStatus.error));
       }
     }
   }
@@ -51,7 +51,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         status: PostsStatus.success,
       ));
     } catch (error) {
-      emit(PostsError(errorMessage: "Failed to load posts"));
+      emit(state.copyWith(status: PostsStatus.error));
     }
   }
 }
