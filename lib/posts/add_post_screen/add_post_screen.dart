@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../galery_screen/gallery_screen.dart';
 import '../widgets/gallery_preview.dart';
+
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});

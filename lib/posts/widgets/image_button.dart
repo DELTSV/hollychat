@@ -9,10 +9,14 @@ class ImageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.file(
-      image,
-      width: 100,
-      fit: BoxFit.cover,
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Image.file(
+        image,
+        width: 100,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }
