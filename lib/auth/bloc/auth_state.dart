@@ -11,13 +11,6 @@ class AuthState {
     this.noAuthCallback,
   });
 
-  // Auth? get auth {
-  //   if (_auth == null) {
-  //     noAuthCallback!();
-  //   }
-  //   return _auth;
-  // }
-
   AuthState copyWith({
     String? token,
     User? user,
@@ -30,6 +23,6 @@ class AuthState {
     );
   }
 
-  bool get isAuthenticated => token != null;
-  bool get isNotAuthenticated => token == null;
+  bool get isAuthenticated => user != null;
+  bool get isNotAuthenticated => user == null;
 }
