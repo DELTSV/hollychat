@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/posts/add_post_bloc/add_post_bloc.dart';
 import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
 
 
@@ -14,7 +15,7 @@ import 'package:hollychat/posts/posts_bloc/posts_bloc.dart';
 import 'package:hollychat/posts/posts_screen/posts_screen.dart';
 
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
-import 'package:hollychat/auth/screens/sign_up_screen.dart';
+import 'package:hollychat/auth/screens/sign_in_screen.dart';
 import 'package:hollychat/auth/services/auth_data_source.dart';
 import 'package:hollychat/auth/services/auth_repository.dart';
 import 'package:hollychat/posts/services/posts_api_data_source.dart';
@@ -69,6 +70,12 @@ class HollyChatApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 PostDetailsBloc(
+                  postsRepository: context.read<PostsRepository>(),
+                ),
+          ),
+          BlocProvider(
+            create: (context) =>
+                AddPostBloc(
                   postsRepository: context.read<PostsRepository>(),
                 ),
           ),
@@ -135,7 +142,7 @@ class HollyChatApp extends StatelessWidget {
           onGenerateRoute: _getRoute,
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
-            '/signup': (context) => const SignUpScreen(),
+            '/signup': (context) => const SignInScreen(),
           },
           navigatorKey: navigatorKey,
         ),

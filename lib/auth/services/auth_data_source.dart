@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hollychat/models/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthDataSource {
   Future<Auth> signUp(
@@ -49,7 +50,13 @@ class AuthApiDataSource extends AuthDataSource {
         'email': email,
         'password': password,
       });
-      return Auth.fromJson(response.data as Map<String, dynamic>);
+
+      Auth auth = Auth.fromJson(response.data as Map<String, dynamic>);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("auth_token", auth.token);
+
+      return auth;
     } catch (error) {
       rethrow;
     }

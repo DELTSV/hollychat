@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/posts/add_post_bloc/add_post_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -24,6 +26,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   List<File>? _imageList;
 
   File? _imageSelected;
+  String _content = "";
 
   @override
   void initState() {
@@ -116,6 +119,40 @@ class _AddPostScreenState extends State<AddPostScreen> {
     selectImage(image);
   }
 
+  _onSendPost() {
+    if (!canSendPost()) {
+      return;
+    }
+
+    final postsBloc = BlocProvider.of<AddPostBloc>(context);
+    postsBloc.add(AddNewPost(
+      content: _content,
+      imageBytes: _imageSelected != null ? _imageSelected!.readAsBytesSync() : [],
+    ));
+  }
+
+  _onPostTextChanged(String value) {
+    setState(() {
+      _content = value;
+    });
+  }
+
+  bool canSendPost() {
+    return _content.isNotEmpty;
+  }
+
+  IconButton getSendButton() {
+    bool canSend = canSendPost();
+
+    return IconButton(
+      onPressed: canSend ? _onSendPost : null,
+      icon: Icon(
+        Icons.send,
+        color: canSend ? Colors.white : Colors.grey[600],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,91 +162,91 @@ class _AddPostScreenState extends State<AddPostScreen> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.close),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.send),
-          ),
-        ],
+        actions: [getSendButton()],
         title: Text(
           'Nouveau post',
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                TextField(
-                  keyboardType: TextInputType.multiline,
-                  autocorrect: true,
-                  autofocus: true,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Quoi de neuf mon reuf ?',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 20),
-                Builder(builder: (context) {
-                  if (_imageSelected == null) {
-                    return const SizedBox();
-                  }
-
-                  return Expanded(
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.file(
-                            _imageSelected!,
-                            fit: BoxFit.contain,
-                          ),
+      body: BlocBuilder<AddPostBloc, AddPostState>(
+        builder: (context, state) {
+          return SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      keyboardType: TextInputType.multiline,
+                      autocorrect: true,
+                      autofocus: true,
+                      maxLines: null,
+                      onChanged: _onPostTextChanged,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Quoi de neuf mon reuf ?',
+                        hintStyle: TextStyle(
+                          color: Colors.grey[500],
                         ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              resetImage();
-                            },
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.cancel,
-                                color: Colors.white,
-                                size: 30,
+                      ),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 20),
+                    Builder(builder: (context) {
+                      if (_imageSelected == null) {
+                        return const SizedBox();
+                      }
+
+                      return Expanded(
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.file(
+                                _imageSelected!,
+                                fit: BoxFit.contain,
                               ),
-                              onPressed: () => setState(() {
-                                resetImage();
-                              }),
                             ),
-                          ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  resetImage();
+                                },
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.cancel,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                  onPressed: () => setState(() {
+                                    resetImage();
+                                  }),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                }),
-                const SizedBox(height: 20),
-                Builder(builder: (context) {
-                  if (_imageList == null) {
-                    return const SizedBox();
-                  }
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                    Builder(builder: (context) {
+                      if (_imageList == null) {
+                        return const SizedBox();
+                      }
 
-                  return GalleryPreview(
-                    imageList: _imageList ?? [],
-                    onImageSelected: _onImageSelected,
-                    onCameraTap: _onCameraTap,
-                    onGalleryTap: _onGalleryTap,
-                    imageSelected: _imageSelected,
-                  );
-                })
-              ],
-            )),
+                      return GalleryPreview(
+                        imageList: _imageList ?? [],
+                        onImageSelected: _onImageSelected,
+                        onCameraTap: _onCameraTap,
+                        onGalleryTap: _onGalleryTap,
+                        imageSelected: _imageSelected,
+                      );
+                    })
+                  ],
+                )),
+          );
+        },
       ),
     );
   }

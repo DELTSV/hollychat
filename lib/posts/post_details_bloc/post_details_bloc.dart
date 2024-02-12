@@ -9,7 +9,6 @@ part 'post_details_state.dart';
 
 class PostDetailsBloc extends Bloc<PostDetailsEvent, PostDetailsState> {
   final PostsRepository postsRepository;
-  final int numberOfPostsPerRequest = 10;
 
   PostDetailsBloc({required this.postsRepository}) : super(PostDetailsState()) {
     on<LoadPostDetailsById>(_onLoadPosts);

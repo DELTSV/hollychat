@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm({super.key});
+  const AuthForm({super.key, required this.onSubmit});
+
+  final void Function(String email, String password) onSubmit;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -56,11 +58,6 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   void handleFormSubmit() {
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    authBloc.add(Login(
-      email: _emailController.text,
-      password: _passwordController.text,
-    ));
-    Navigator.pop(context);
+    widget.onSubmit(_emailController.text, _passwordController.text);
   }
 }

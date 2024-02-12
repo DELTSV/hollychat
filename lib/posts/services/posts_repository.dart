@@ -18,4 +18,8 @@ class PostsRepository {
   Future<FullPost> getPostDetailsById(int postId) async {
     return postsDataSource.getPostDetailsById(postId);
   }
+
+  Future<void> createPost(String content, List<int> imageBytes) async {
+    return postsDataSource.createPost(content, imageBytes);
+  }
 }

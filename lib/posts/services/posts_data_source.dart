@@ -7,4 +7,6 @@ abstract class PostsDataSource {
       int pageNumber, int numberOfPostsPerRequest);
 
   Future<FullPost> getPostDetailsById(int postId);
+
+  Future<void> createPost(String content, List<int> imageBytes);
 }
