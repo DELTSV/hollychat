@@ -2,7 +2,6 @@ import 'package:hollychat/posts/services/posts_data_source.dart';
 
 import '../../models/full_post.dart';
 import '../../models/minimal_post.dart';
-import '../../models/post.dart';
 
 class PostsRepository {
   final PostsDataSource postsDataSource;
@@ -21,5 +20,9 @@ class PostsRepository {
 
   Future<void> createPost(String content, List<int> imageBytes) async {
     return postsDataSource.createPost(content, imageBytes);
+  }
+
+  Future<void> deletePost(int postId) async {
+    return postsDataSource.deletePost(postId);
   }
 }

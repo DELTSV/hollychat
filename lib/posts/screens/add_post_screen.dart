@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/posts/add_post_bloc/add_post_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../bloc/add_post_bloc/add_post_bloc.dart';
 import '../widgets/gallery_preview.dart';
 
 class AddPostScreen extends StatefulWidget {
@@ -127,7 +127,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     final postsBloc = BlocProvider.of<AddPostBloc>(context);
     postsBloc.add(AddNewPost(
       content: _content,
-      imageBytes: _imageSelected != null ? _imageSelected!.readAsBytesSync() : [],
+      imageBytes:
+          _imageSelected != null ? _imageSelected!.readAsBytesSync() : [],
     ));
   }
 
@@ -168,85 +169,92 @@ class _AddPostScreenState extends State<AddPostScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: BlocBuilder<AddPostBloc, AddPostState>(
-        builder: (context, state) {
-          return SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      keyboardType: TextInputType.multiline,
-                      autocorrect: true,
-                      autofocus: true,
-                      maxLines: null,
-                      onChanged: _onPostTextChanged,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Quoi de neuf mon reuf ?',
-                        hintStyle: TextStyle(
-                          color: Colors.grey[500],
+      body: BlocListener<AddPostBloc, AddPostState>(
+        listener: (context, state) {
+          if (state.status == AddPostStatus.success) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: BlocBuilder<AddPostBloc, AddPostState>(
+          builder: (context, state) {
+            return SafeArea(
+              child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        keyboardType: TextInputType.multiline,
+                        autocorrect: true,
+                        autofocus: true,
+                        maxLines: null,
+                        onChanged: _onPostTextChanged,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Quoi de neuf mon reuf ?',
+                          hintStyle: TextStyle(
+                            color: Colors.grey[500],
+                          ),
                         ),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 20),
-                    Builder(builder: (context) {
-                      if (_imageSelected == null) {
-                        return const SizedBox();
-                      }
+                      const SizedBox(height: 20),
+                      Builder(builder: (context) {
+                        if (_imageSelected == null) {
+                          return const SizedBox();
+                        }
 
-                      return Expanded(
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.file(
-                                _imageSelected!,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  resetImage();
-                                },
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.cancel,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                  onPressed: () => setState(() {
-                                    resetImage();
-                                  }),
+                        return Expanded(
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.file(
+                                  _imageSelected!,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 20),
-                    Builder(builder: (context) {
-                      if (_imageList == null) {
-                        return const SizedBox();
-                      }
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    resetImage();
+                                  },
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.cancel,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                    onPressed: () => setState(() {
+                                      resetImage();
+                                    }),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: 20),
+                      Builder(builder: (context) {
+                        if (_imageList == null) {
+                          return const SizedBox();
+                        }
 
-                      return GalleryPreview(
-                        imageList: _imageList ?? [],
-                        onImageSelected: _onImageSelected,
-                        onCameraTap: _onCameraTap,
-                        onGalleryTap: _onGalleryTap,
-                        imageSelected: _imageSelected,
-                      );
-                    })
-                  ],
-                )),
-          );
-        },
+                        return GalleryPreview(
+                          imageList: _imageList ?? [],
+                          onImageSelected: _onImageSelected,
+                          onCameraTap: _onCameraTap,
+                          onGalleryTap: _onGalleryTap,
+                          imageSelected: _imageSelected,
+                        );
+                      })
+                    ],
+                  )),
+            );
+          },
+        ),
       ),
     );
   }

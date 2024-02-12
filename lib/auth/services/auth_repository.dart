@@ -1,5 +1,8 @@
-import 'package:hollychat/auth/services/auth_data_source.dart';
+import 'package:hollychat/auth/services/auth_api_data_source.dart';
 import 'package:hollychat/models/auth.dart';
+import 'package:hollychat/models/user.dart';
+
+import 'auth_data_source.dart';
 
 class AuthRepository {
   final AuthDataSource authDataSource;
@@ -26,5 +29,9 @@ class AuthRepository {
       email,
       password,
     );
+  }
+
+  Future<User> getUser() async {
+    return authDataSource.getUser();
   }
 }

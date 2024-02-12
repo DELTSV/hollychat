@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/widgets/post_comment.dart';
 import 'package:hollychat/posts/widgets/post_separator.dart';
 
 import '../../models/minimal_post.dart';
+import '../bloc/post_details_bloc/post_details_bloc.dart';
 import '../widgets/post_author.dart';
 import '../widgets/post_content.dart';
 

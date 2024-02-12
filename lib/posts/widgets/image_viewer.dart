@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hollychat/models/post_image.dart';
 
-import '../image_screen/image_screen.dart';
+import '../screens/image_screen.dart';
 
 class ImageViewer extends StatefulWidget {
   const ImageViewer({

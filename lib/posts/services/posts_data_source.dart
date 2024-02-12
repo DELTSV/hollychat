@@ -9,4 +9,6 @@ abstract class PostsDataSource {
   Future<FullPost> getPostDetailsById(int postId);
 
   Future<void> createPost(String content, List<int> imageBytes);
+
+  Future<void> deletePost(int postId);
 }

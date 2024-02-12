@@ -1,23 +1,35 @@
 part of 'auth_bloc.dart';
 
 class AuthState {
-  final Auth? _auth;
   final Function? noAuthCallback;
+  final String? token;
+  final User? user;
 
-  AuthState({Auth? auth, this.noAuthCallback}) : _auth = auth;
+  AuthState({
+    this.token,
+    this.user,
+    this.noAuthCallback,
+  });
 
-  AuthState withNewAuth(Auth? auth) => AuthState(
-        auth: auth,
-        noAuthCallback: noAuthCallback,
-      );
+  // Auth? get auth {
+  //   if (_auth == null) {
+  //     noAuthCallback!();
+  //   }
+  //   return _auth;
+  // }
 
-  Auth? get auth {
-    if (_auth == null) {
-      noAuthCallback!();
-    }
-    return _auth;
+  AuthState copyWith({
+    String? token,
+    User? user,
+    Function? noAuthCallback,
+  }) {
+    return AuthState(
+      token: token ?? this.token,
+      user: user ?? this.user,
+      noAuthCallback: noAuthCallback ?? this.noAuthCallback,
+    );
   }
 
-  bool get isAuthenticated => _auth != null;
-  bool get isNotAuthenticated => _auth == null;
+  bool get isAuthenticated => token != null;
+  bool get isNotAuthenticated => token == null;
 }

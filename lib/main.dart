@@ -1,22 +1,20 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/posts/add_post_bloc/add_post_bloc.dart';
-import 'package:hollychat/posts/add_post_screen/add_post_screen.dart';
+import 'package:hollychat/posts/bloc/add_post_bloc/add_post_bloc.dart';
+import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
+import 'package:hollychat/posts/bloc/post_details_bloc/post_details_bloc.dart';
+import 'package:hollychat/posts/bloc/posts_bloc/posts_bloc.dart';
+import 'package:hollychat/posts/screens/add_post_screen.dart';
 
 
-import 'package:hollychat/posts/galery_screen/gallery_screen.dart';
-import 'package:hollychat/posts/image_screen/image_screen.dart';
-import 'package:hollychat/posts/post_details_bloc/post_details_bloc.dart';
-import 'package:hollychat/posts/post_details_screen/post_details_screen.dart';
-import 'package:hollychat/posts/posts_bloc/posts_bloc.dart';
-import 'package:hollychat/posts/posts_screen/posts_screen.dart';
+import 'package:hollychat/posts/screens/image_screen.dart';
+import 'package:hollychat/posts/screens/post_details_screen.dart';
+import 'package:hollychat/posts/screens/posts_screen.dart';
 
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/auth/screens/sign_in_screen.dart';
-import 'package:hollychat/auth/services/auth_data_source.dart';
+import 'package:hollychat/auth/services/auth_api_data_source.dart';
 import 'package:hollychat/auth/services/auth_repository.dart';
 import 'package:hollychat/posts/services/posts_api_data_source.dart';
 
@@ -63,8 +61,15 @@ class HollyChatApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
+                DeletePostBloc(
+                  postsRepository: context.read<PostsRepository>(),
+                ),
+          ),
+          BlocProvider(
+            create: (context) =>
                 PostsBloc(
                   postsRepository: context.read<PostsRepository>(),
+                  deletePostBloc: BlocProvider.of<DeletePostBloc>(context),
                 ),
           ),
           BlocProvider(
@@ -89,56 +94,7 @@ class HollyChatApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          theme: ThemeData(
-            useMaterial3: true,
-            primaryColor: const Color(0xff131D35),
-            cardColor: const Color(0xff1E2A47),
-            scaffoldBackgroundColor: const Color(0xff131D35),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color(0xff131D35),
-              elevation: 1,
-            ),
-            progressIndicatorTheme: const ProgressIndicatorThemeData(
-              color: Colors.white,
-            ),
-            textTheme: const TextTheme(
-              titleLarge: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              headlineLarge: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              headlineMedium: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              headlineSmall: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-              bodyLarge: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-              ),
-              bodyMedium: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              ),
-              bodySmall: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ),
+          theme: _getTheme(),
           onGenerateRoute: _getRoute,
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
@@ -169,13 +125,6 @@ Route? _getRoute(RouteSettings settings) {
       break;
     case AddPostScreen.routeName:
       return _createAddPostRoute(const AddPostScreen());
-    case GalleryScreen.routeName:
-      final arguments = settings.arguments;
-      if (arguments is List) {
-        final imageList = arguments.cast<File>();
-        return _createAddPostRoute(GalleryScreen(imageList: imageList));
-      }
-      break;
   }
 
   return null;
@@ -224,5 +173,70 @@ Route _createPostRoute(final Widget content) {
         child: child,
       );
     },
+  );
+}
+
+ThemeData _getTheme() {
+  return ThemeData(
+    useMaterial3: true,
+    primaryColor: const Color(0xff131D35),
+    cardColor: const Color(0xff1E2A47),
+    scaffoldBackgroundColor: const Color(0xff131D35),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xff131D35),
+      elevation: 1,
+    ),
+    dialogTheme: const DialogTheme(
+      backgroundColor: Color(0xff1E2A47),
+    ),
+    buttonTheme: const ButtonThemeData(
+      buttonColor: Color(0xff1E2A47),
+      textTheme: ButtonTextTheme.normal,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: Colors.white,
+      ),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: Colors.white,
+    ),
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineMedium: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineSmall: TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      ),
+      bodySmall: TextStyle(
+        color: Colors.white,
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      ),
+    ),
   );
 }

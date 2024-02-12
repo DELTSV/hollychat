@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
-import '../services/posts_repository.dart';
+import '../../services/posts_repository.dart';
 
 part 'add_post_event.dart';
 part 'add_post_state.dart';

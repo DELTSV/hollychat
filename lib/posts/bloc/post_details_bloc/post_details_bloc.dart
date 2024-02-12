@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:hollychat/models/full_post.dart';
 
-import '../services/posts_repository.dart';
+import '../../services/posts_repository.dart';
 
 part 'post_details_event.dart';
 part 'post_details_state.dart';

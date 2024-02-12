@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/models/minimal_post.dart';
+import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/widgets/post_author.dart';
 import 'package:hollychat/posts/widgets/post_content.dart';
 
-import 'image_viewer.dart';
+class MenuItem {
+  const MenuItem({
+    required this.type,
+    required this.content,
+  });
+
+  final MenuItemType type;
+  final Widget content;
+}
+
+enum MenuItemType {
+  edit,
+  delete,
+}
 
 class PostPreview extends StatelessWidget {
   const PostPreview({
@@ -15,6 +30,89 @@ class PostPreview extends StatelessWidget {
   final MinimalPost post;
   final VoidCallback? onTap;
 
+  List<PopupMenuItem<MenuItemType>> _buildItems() {
+    const List<MenuItem> items = [
+      MenuItem(
+        type: MenuItemType.edit,
+        content: Row(
+          children: [
+            Icon(Icons.edit),
+            SizedBox(width: 10),
+            Text('Éditer'),
+          ],
+        ),
+      ),
+      MenuItem(
+        type: MenuItemType.delete,
+        content: Row(
+          children: [
+            Icon(Icons.delete, color: Colors.redAccent),
+            SizedBox(width: 10),
+            Text('Supprimer', style: TextStyle(color: Colors.redAccent)),
+          ],
+        ),
+      ),
+    ];
+
+    return items
+        .map(
+          (MenuItem item) => PopupMenuItem<MenuItemType>(
+            value: item.type,
+            child: item.content,
+          ),
+        )
+        .toList();
+  }
+
+  _onItemSelected(MenuItemType value, BuildContext context) {
+    switch (value) {
+      case MenuItemType.edit:
+        break;
+      case MenuItemType.delete:
+        showAlertDialog(context);
+        break;
+    }
+  }
+
+  _onDeletePost(BuildContext context) {
+    BlocProvider.of<DeletePostBloc>(context).add(DeletePost(
+      id: post.id,
+    ));
+
+    Navigator.of(context).pop();
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget continueButton = TextButton(
+      child: const Text("Confirmer"),
+      onPressed: () {
+        _onDeletePost(context);
+      },
+    );
+    Widget cancelButton = TextButton(
+      child: const Text("Annuler"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: const Text("Supprimer le post"),
+      content: const Text(
+          "Êtes-vous sûr de vouloir supprimer ce post ? Cette action est irréversible."),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -24,7 +122,24 @@ class PostPreview extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PostAuthor(author: post.author),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PostAuthor(author: post.author),
+                const SizedBox(height: 10),
+                PopupMenuButton<MenuItemType>(
+                  iconColor: Colors.white,
+                  onSelected: (MenuItemType value) => _onItemSelected(
+                    value,
+                    context,
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return _buildItems();
+                  },
+                ),
+              ],
+            ),
             const SizedBox(height: 10),
             PostContent(content: post.content, image: post.image),
           ],
