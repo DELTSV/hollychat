@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/models/author.dart';
 import 'package:hollychat/models/minimal_post.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/widgets/post_author.dart';
 import 'package:hollychat/posts/widgets/post_content.dart';
+
+import '../../auth/bloc/auth_bloc.dart';
+import '../../models/user.dart';
 
 class MenuItem {
   const MenuItem({
@@ -113,37 +117,57 @@ class PostPreview extends StatelessWidget {
     );
   }
 
+  _getPostHeader(BuildContext context, bool isAuthor) {
+    if (!isAuthor) {
+      return PostAuthor(author: post.author);
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        PostAuthor(author: post.author),
+        PopupMenuButton<MenuItemType>(
+          iconColor: Colors.white,
+          onSelected: (MenuItemType value) => _onItemSelected(
+            value,
+            context,
+          ),
+          itemBuilder: (BuildContext context) {
+            return _buildItems();
+          },
+        ),
+      ],
+    );
+  }
+
+  _compareUserAuthor(User? user, Author author) {
+    if (user == null) {
+      return false;
+    }
+
+    return user.id == post.author.id;
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                PostAuthor(author: post.author),
-                const SizedBox(height: 10),
-                PopupMenuButton<MenuItemType>(
-                  iconColor: Colors.white,
-                  onSelected: (MenuItemType value) => _onItemSelected(
-                    value,
-                    context,
-                  ),
-                  itemBuilder: (BuildContext context) {
-                    return _buildItems();
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            PostContent(content: post.content, image: post.image),
-          ],
-        ),
+        child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _getPostHeader(
+                context,
+                _compareUserAuthor(state.user, post.author),
+              ),
+              const SizedBox(height: 10),
+              PostContent(content: post.content, image: post.image),
+            ],
+          );
+        }),
       ),
     );
   }
