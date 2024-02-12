@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/models/author.dart';
 import 'package:hollychat/models/minimal_post.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
+import 'package:hollychat/posts/widgets/delete_alert_dialog.dart';
 import 'package:hollychat/posts/widgets/post_author.dart';
 import 'package:hollychat/posts/widgets/post_content.dart';
 
@@ -82,37 +83,20 @@ class PostPreview extends StatelessWidget {
     BlocProvider.of<DeletePostBloc>(context).add(DeletePost(
       id: post.id,
     ));
+  }
 
+  void _onPostDeleted(BuildContext context) {
     Navigator.of(context).pop();
   }
 
   showAlertDialog(BuildContext context) {
-    Widget continueButton = TextButton(
-      child: const Text("Confirmer"),
-      onPressed: () {
-        _onDeletePost(context);
-      },
-    );
-    Widget cancelButton = TextButton(
-      child: const Text("Annuler"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: const Text("Supprimer le post"),
-      content: const Text(
-          "Êtes-vous sûr de vouloir supprimer ce post ? Cette action est irréversible."),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return DeleteAlertDialog(
+          onDeletePost: () => _onDeletePost(context),
+          onCancel: () => Navigator.of(context).pop(),
+        );
       },
     );
   }
@@ -122,22 +106,29 @@ class PostPreview extends StatelessWidget {
       return PostAuthor(author: post.author);
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        PostAuthor(author: post.author),
-        PopupMenuButton<MenuItemType>(
-          iconColor: Colors.white,
-          onSelected: (MenuItemType value) => _onItemSelected(
-            value,
-            context,
+    return BlocListener<DeletePostBloc, DeletePostState>(
+      listener: (context, state) {
+        if (state.status == DeletePostStatus.success) {
+          _onPostDeleted(context);
+        }
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          PostAuthor(author: post.author),
+          PopupMenuButton<MenuItemType>(
+            iconColor: Colors.white,
+            onSelected: (MenuItemType value) => _onItemSelected(
+              value,
+              context,
+            ),
+            itemBuilder: (BuildContext context) {
+              return _buildItems();
+            },
           ),
-          itemBuilder: (BuildContext context) {
-            return _buildItems();
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 

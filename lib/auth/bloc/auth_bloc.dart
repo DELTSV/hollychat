@@ -3,8 +3,6 @@ import 'package:hollychat/auth/services/auth_repository.dart';
 import 'package:hollychat/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/auth.dart';
-
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -25,8 +23,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onGetToken(GetToken event, Emitter<AuthState> emit) async {
     final token = await _getToken();
-
-    print("once again token is $token");
 
     emit(
       state.copyWith(
@@ -77,7 +73,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onGetUser(GetUser event, Emitter<AuthState> emit) async {
     try {
       final user = await authRepository.getUser();
-      print(user);
       emit(
         state.copyWith(
           user: user,
