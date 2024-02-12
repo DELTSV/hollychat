@@ -54,12 +54,23 @@ class _PostsScreenState extends State<PostsScreen> {
         title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const Image(image: AssetImage('assets/images/logo.png'), height: 30),
           BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) => TextButton(
-              onPressed: () => print(state.token),
-              child: Text(
-                state.isNotAuthenticated ? "Connexion" : state.user!.name,
-              ),
-            ),
+            builder: (context, state) {
+              if (state.isAuthenticated) {
+                return Text(
+                  state.user!.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }
+
+              return TextButton(
+                onPressed: () => print(state.token),
+                child: const Text("Connexion"),
+              );
+            },
           ),
         ]),
       ),
