@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/gallery_preview.dart';
 
-
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
 
@@ -27,7 +26,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   void initState() {
     super.initState();
-    _checkImagesPermission();
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _checkImagesPermission();
+    });
   }
 
   Future<bool> _checkCameraPermission() async {
@@ -138,15 +140,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
                 // add a button to navigate to the gallery
                 const SizedBox(height: 20),
-                GalleryPreview(imageList: _imageList ?? []),
-                ElevatedButton(
-                  onPressed: () => _onGalleryTap(),
-                  child: const Text('Ajouter une image'),
-                ),
-                ElevatedButton(
-                  onPressed: () => _onCameraTap(),
-                  child: const Text('Prendre une photo'),
-                ),
+                Builder(builder: (context) {
+                  if (_imageList == null) {
+                    return const SizedBox();
+                  }
+
+                  return GalleryPreview(
+                    imageList: _imageList ?? [],
+                    onImageSelected: (image) {
+                      // do something with the image
+                    },
+                    onCameraTap: _onCameraTap,
+                    onGalleryTap: _onGalleryTap,
+                  );
+                })
               ],
             )),
       ),
