@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../galery_screen/gallery_screen.dart';
 import '../widgets/gallery_preview.dart';
@@ -25,63 +27,69 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   void initState() {
     super.initState();
-    _checkPermission();
+    _checkImagesPermission();
   }
 
-  Future<void> _checkPermission() async {
-    final bool isPermissionGranted = await _requestPermission();
-    if (isPermissionGranted) {
-      // Permission granted, load images
+  Future<bool> _checkCameraPermission() async {
+    final status = await Permission.camera.request();
+    if (status.isGranted) {
+      return true;
+    } else if (status.isPermanentlyDenied) {
+      return openAppSettings().then((value) => value);
+    }
+
+    return false;
+  }
+
+  _checkImagesPermission() async {
+    final status = await Permission.photos.request();
+    if (status.isGranted) {
       _loadImages();
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
     }
   }
 
-  Future<bool> _requestPermission() async {
-    try {
-      // Checking permission
+  _onGalleryTap() {
+    ImagePicker imagePicker = ImagePicker();
 
-      // Invoke method and wait for result
-      bool? test = await const MethodChannel('permissions')
-          .invokeMethod<bool>('requestStoragePermission');
-
-      if (test != null && test) {
-        // Permission already granted
-        return true;
-      } else {
-        // Permission denied, waiting for user
-
-        const MethodChannel('permissions').setMethodCallHandler((call) async {
-          if (call.method == 'onRequestPermissionsResult') {
-            final bool? isPermissionGranted = call.arguments;
-
-            if (isPermissionGranted != null && isPermissionGranted) {
-              // Permission granted from handler
-              _loadImages();
-            } else {
-              // Permission denied from handler
-              Navigator.of(context).pop();
-            }
-          }
+    imagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      if (image != null) {
+        setState(() {
+          _imageList = [File(image.path)];
         });
-
-        return false;
       }
-    } on PlatformException catch (e) {
-      return false;
+    });
+  }
+
+  _onCameraTap() async {
+    ImagePicker imagePicker = ImagePicker();
+
+    if (await _checkCameraPermission() == false) {
+      return;
     }
+
+    imagePicker.pickImage(source: ImageSource.camera).then((image) {
+      if (image != null) {
+        setState(() {
+          _imageList = [File(image.path)];
+        });
+      }
+    });
   }
 
   Future<void> _loadImages() async {
     try {
       const MethodChannel _channel = MethodChannel('image_gallery');
-      final List<dynamic>? result =
-          await _channel.invokeMethod<List<dynamic>>('getImages');
+      // Pass the count argument to the platform method
+      final List<dynamic>? result = await _channel.invokeMethod<List<dynamic>>(
+        'getImages',
+        <String, dynamic>{'count': 8},
+      );
 
       if (result != null) {
         setState(() {
-          List<File> files = result.map((path) => File(path)).toList();
-          files.sort((a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()));
-          _imageList = files;
+          _imageList = result.map((path) => File(path)).toList();
         });
       }
     } on PlatformException catch (e) {
@@ -130,14 +138,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
                 // add a button to navigate to the gallery
                 const SizedBox(height: 20),
-                GalleryPreview(
-                  imageList: _imageList?.sublist(0, 10) ?? [],
+                GalleryPreview(imageList: _imageList ?? []),
+                ElevatedButton(
+                  onPressed: () => _onGalleryTap(),
+                  child: const Text('Ajouter une image'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    GalleryScreen.navigateTo(context, _imageList ?? []);
-                  },
-                  child: const Text('Ajouter une image'),
+                  onPressed: () => _onCameraTap(),
+                  child: const Text('Prendre une photo'),
                 ),
               ],
             )),
