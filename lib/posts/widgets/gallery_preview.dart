@@ -22,12 +22,14 @@ class GalleryPreview extends StatelessWidget {
     required this.onImageSelected,
     required this.onCameraTap,
     required this.onGalleryTap,
+    required this.imageSelected,
   });
 
   final List<File> imageList;
   final void Function(File) onImageSelected;
   final void Function() onCameraTap;
   final void Function() onGalleryTap;
+  final File? imageSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,11 @@ class GalleryPreview extends StatelessWidget {
                 ),
               );
             case GalleryItemType.image:
-              return ImageButton(image: galleryItem.image!);
+              return ImageButton(
+                image: galleryItem.image!,
+                onTap: () => onImageSelected(galleryItem.image!),
+                selected: galleryItem.image == imageSelected,
+              );
           }
         },
       ),

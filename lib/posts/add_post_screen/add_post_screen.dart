@@ -23,6 +23,8 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   List<File>? _imageList;
 
+  File? _imageSelected;
+
   @override
   void initState() {
     super.initState();
@@ -57,9 +59,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     imagePicker.pickImage(source: ImageSource.gallery).then((image) {
       if (image != null) {
-        setState(() {
-          _imageList = [File(image.path)];
-        });
+        selectImage(File(image.path));
       }
     });
   }
@@ -73,9 +73,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     imagePicker.pickImage(source: ImageSource.camera).then((image) {
       if (image != null) {
-        setState(() {
-          _imageList = [File(image.path)];
-        });
+        selectImage(File(image.path));
       }
     });
   }
@@ -97,6 +95,25 @@ class _AddPostScreenState extends State<AddPostScreen> {
     } on PlatformException catch (e) {
       // Handle error here
     }
+  }
+
+  void selectImage(File? image) {
+    setState(() {
+      _imageSelected = image;
+    });
+  }
+
+  void resetImage() {
+    selectImage(null);
+  }
+
+  void _onImageSelected(File image) {
+    if (_imageSelected == image) {
+      resetImage();
+      return;
+    }
+
+    selectImage(image);
   }
 
   @override
@@ -138,7 +155,45 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   ),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                // add a button to navigate to the gallery
+                const SizedBox(height: 20),
+                Builder(builder: (context) {
+                  if (_imageSelected == null) {
+                    return const SizedBox();
+                  }
+
+                  return Expanded(
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.file(
+                            _imageSelected!,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              resetImage();
+                            },
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.cancel,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              onPressed: () => setState(() {
+                                resetImage();
+                              }),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
                 const SizedBox(height: 20),
                 Builder(builder: (context) {
                   if (_imageList == null) {
@@ -147,11 +202,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
                   return GalleryPreview(
                     imageList: _imageList ?? [],
-                    onImageSelected: (image) {
-                      // do something with the image
-                    },
+                    onImageSelected: _onImageSelected,
                     onCameraTap: _onCameraTap,
                     onGalleryTap: _onGalleryTap,
+                    imageSelected: _imageSelected,
                   );
                 })
               ],
