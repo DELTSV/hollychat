@@ -5,8 +5,8 @@ import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/auth/screens/sign_in_screen.dart';
 import 'package:hollychat/auth/services/auth_api_data_source.dart';
 import 'package:hollychat/auth/services/auth_repository.dart';
-import 'package:hollychat/posts/bloc/add_post_bloc/add_post_bloc.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
+import 'package:hollychat/posts/bloc/post_bloc/post_bloc.dart';
 import 'package:hollychat/posts/bloc/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/bloc/posts_bloc/posts_bloc.dart';
 import 'package:hollychat/posts/screens/add_post_screen.dart';
@@ -71,7 +71,7 @@ class HollyChatApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => AddPostBloc(
+            create: (context) => PostBloc(
               postsRepository: context.read<PostsRepository>(),
             ),
           ),

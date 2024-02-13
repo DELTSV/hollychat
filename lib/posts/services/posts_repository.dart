@@ -25,4 +25,8 @@ class PostsRepository {
   Future<void> deletePost(int postId) async {
     return postsDataSource.deletePost(postId);
   }
+
+  Future<void> updatePost(int postId, String content, List<int> imageBytes) async {
+    return postsDataSource.updatePost(postId, content, imageBytes);
+  }
 }

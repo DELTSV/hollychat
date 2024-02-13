@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/widgets/post_form.dart';
 
-import '../bloc/add_post_bloc/add_post_bloc.dart';
+import '../bloc/post_bloc/post_bloc.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -28,7 +28,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       return;
     }
 
-    final postsBloc = BlocProvider.of<AddPostBloc>(context);
+    final postsBloc = BlocProvider.of<PostBloc>(context);
     postsBloc.add(AddNewPost(
       content: _content,
       imageBytes:
@@ -67,13 +67,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: BlocListener<AddPostBloc, AddPostState>(
+      body: BlocListener<PostBloc, PostState>(
         listener: (context, state) {
-          if (state.status == AddPostStatus.success) {
+          if (state.status == PostStatus.success) {
             Navigator.of(context).pop();
           }
         },
-        child: BlocBuilder<AddPostBloc, AddPostState>(
+        child: BlocBuilder<PostBloc, PostState>(
           builder: (context, state) {
             return SafeArea(
               child: Padding(

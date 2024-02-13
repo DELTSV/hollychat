@@ -2,10 +2,13 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/models/minimal_post.dart';
 import 'package:hollychat/posts/widgets/post_form.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+
+import '../bloc/post_bloc/post_bloc.dart';
 
 class EditPostScreen extends StatefulWidget {
   const EditPostScreen({super.key, required this.post});
@@ -24,6 +27,7 @@ class EditPostScreen extends StatefulWidget {
 
 class _EditPostScreenState extends State<EditPostScreen> {
   File? _imageSelected;
+  bool _imageUpdated = false;
   String _content = "";
 
   String _defaultContent = "";
@@ -66,9 +70,19 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   _editPost() {
-    if (_canEditPost()) {
-      print("object");
+    if (!_canEditPost()) {
+      return;
     }
+
+    final postsBloc = BlocProvider.of<PostBloc>(context);
+    postsBloc.add(
+      UpdatePost(
+        id: widget.post.id,
+        content: _content,
+        imageBytes:
+            _imageSelected != null ? _imageSelected!.readAsBytesSync() : [],
+      ),
+    );
   }
 
   _getEditButton() {
@@ -96,6 +110,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         onImageSelected: (image) {
           setState(() {
             _imageSelected = image;
+            _imageUpdated = true;
           });
         },
       );
@@ -108,8 +123,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   _canEditPost() {
     bool contentChanged = _content != _defaultContent;
-    bool imageChanged = _imageSelected != _defaultImage;
-    return _content.isNotEmpty && (contentChanged || imageChanged);
+    return _content.isNotEmpty && (contentChanged || _imageUpdated);
   }
 
   @override
@@ -127,10 +141,17 @@ class _EditPostScreenState extends State<EditPostScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          child: _getPostForm(),
+      body: BlocListener<PostBloc, PostState>(
+        listener: (context, state) {
+          if (state.status == PostStatus.success) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15.0),
+            child: _getPostForm(),
+          ),
         ),
       ),
     );

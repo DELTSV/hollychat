@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/posts/bloc/add_post_bloc/add_post_bloc.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/screens/add_post_screen.dart';
 import 'package:hollychat/posts/screens/post_details_screen.dart';
@@ -8,6 +7,7 @@ import 'package:hollychat/posts/widgets/post_preview.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 import '../../models/minimal_post.dart';
+import '../bloc/post_bloc/post_bloc.dart';
 import '../bloc/posts_bloc/posts_bloc.dart';
 import '../widgets/post_separator.dart';
 
@@ -97,9 +97,9 @@ class _PostsScreenState extends State<PostsScreen> {
           },
           child: MultiBlocListener(
             listeners: [
-              BlocListener<AddPostBloc, AddPostState>(
+              BlocListener<PostBloc, PostState>(
                 listener: (context, state) {
-                  if (state.status == AddPostStatus.success) {
+                  if (state.status == PostStatus.success) {
                     _refreshPosts();
                   }
                 },

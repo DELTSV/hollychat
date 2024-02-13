@@ -10,7 +10,7 @@ import '../../models/minimal_post.dart';
 class PostsApiDataSource extends PostsDataSource {
   final dio = Dio(
     BaseOptions(
-      baseUrl: 'https://xoc1-kd2t-7p9b.n7c.xano.io/api:xbcc5VEi',
+      baseUrl: 'https://xoc1-kd2t-7p9b.n7c.xano.io/api:xbcc5VEi/post',
     ),
   );
 
@@ -20,7 +20,7 @@ class PostsApiDataSource extends PostsDataSource {
     int numberOfPostsPerRequest,
   ) async {
     try {
-      final response = await dio.get('/post', queryParameters: {
+      final response = await dio.get('', queryParameters: {
         'page': pageNumber,
         'per_page': numberOfPostsPerRequest,
       });
@@ -36,7 +36,7 @@ class PostsApiDataSource extends PostsDataSource {
   @override
   Future<FullPost> getPostDetailsById(int postId) async {
     try {
-      final response = await dio.get('/post/$postId');
+      final response = await dio.get('/$postId');
       return FullPost.fromJson(response.data as Map<String, dynamic>);
     } catch (error) {
       rethrow;
@@ -47,7 +47,7 @@ class PostsApiDataSource extends PostsDataSource {
   Future<void> createPost(String content, List<int> imageBytes) async {
     try {
       await dio.post(
-        '/post',
+        '',
         data: {
           'content': content,
           'base_64_image': encodeImage(imageBytes),
@@ -65,7 +65,7 @@ class PostsApiDataSource extends PostsDataSource {
   Future<void> deletePost(int postId) async {
     try {
       await dio.delete(
-        '/post/$postId',
+        '/$postId',
         options: Options(headers: {
           ...await _getAuthorizationHeader(),
         }),
@@ -90,5 +90,23 @@ class PostsApiDataSource extends PostsDataSource {
     }
 
     return "data:image/png;base64,${base64Encode(imageBytes)}";
+  }
+
+  @override
+  Future<void> updatePost(int postId, String content, List<int> imageBytes) async {
+    try {
+      await dio.patch(
+        '/$postId',
+        data: {
+          'content': content,
+          'base_64_image': encodeImage(imageBytes),
+        },
+        options: Options(headers: {
+          ...await _getAuthorizationHeader(),
+        }),
+      );
+    } catch (error) {
+      rethrow;
+    }
   }
 }
