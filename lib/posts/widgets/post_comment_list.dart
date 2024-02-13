@@ -21,16 +21,18 @@ class PostCommentList extends StatelessWidget {
 
     return Column(
       children: [
-        ...comments.map((comment) => Column(
-              children: [
-                PostCommentPreview(
-                  comment: comment,
-                ),
-                const PostSeparator(
-                  padding: 10,
-                ),
-              ],
-            )),
+        ...comments.map(
+          (comment) => Column(
+            children: [
+              PostCommentPreview(
+                comment: comment,
+              ),
+              const PostSeparator(
+                padding: 10,
+              ),
+            ],
+          ),
+        ),
         Center(
           child: Text(
             'Aucun autre commentaire trouvé.',

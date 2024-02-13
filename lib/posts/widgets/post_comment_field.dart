@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
 
-class PostCommentField extends StatelessWidget {
+class PostCommentField extends StatefulWidget {
   const PostCommentField({super.key});
+
+  @override
+  State<PostCommentField> createState() => _PostCommentFieldState();
+}
+
+class _PostCommentFieldState extends State<PostCommentField> {
+  final TextEditingController _controller = TextEditingController();
+  String _commentContent = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(() {
+      _onPostTextChanged(_controller.text);
+    });
+  }
+
+  void _onPostTextChanged(String text) {
+    setState(() {
+      _commentContent = text;
+    });
+  }
+
+  bool canSubmit() {
+    return _commentContent.isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +54,7 @@ class PostCommentField extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
+                  controller: _controller,
                   keyboardType: TextInputType.multiline,
                   autocorrect: true,
                   maxLines: null,
@@ -42,8 +70,9 @@ class PostCommentField extends StatelessWidget {
               ),
               // Second child is button
               IconButton(
-                icon: const Icon(Icons.send),
-                iconSize: 20.0,
+                icon: Icon(Icons.send,
+                    color: canSubmit() ? Colors.white : Colors.grey[600]),
+                iconSize: 25.0,
                 onPressed: () => {},
               )
             ],

@@ -91,7 +91,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return IconButton(
       onPressed: canEdit ? _editPost : null,
       icon: Icon(
-        Icons.edit,
+        Icons.save,
         color: canEdit ? Colors.white : Colors.grey[600],
       ),
     );
