@@ -39,10 +39,6 @@ class _PostFormState extends State<PostForm> {
 
     if (widget.defaultImage != null) {
       _imageSelected = widget.defaultImage;
-
-      // WidgetsBinding.instance.addPostFrameCallback((_) async {
-      //   widget.onImageSelected(_imageSelected);
-      // });
     }
 
     if (widget.defaultContent.isNotEmpty) {

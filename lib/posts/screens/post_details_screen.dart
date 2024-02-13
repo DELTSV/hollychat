@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/posts/bloc/post_bloc/post_bloc.dart';
-import 'package:hollychat/posts/widgets/post_comment.dart';
+import 'package:hollychat/posts/widgets/post_comment_list.dart';
 import 'package:hollychat/posts/widgets/post_separator.dart';
 
 import '../../models/minimal_post.dart';
@@ -10,6 +10,7 @@ import '../bloc/delete_post_bloc/delete_post_bloc.dart';
 import '../bloc/post_details_bloc/post_details_bloc.dart';
 import '../widgets/delete_alert_dialog.dart';
 import '../widgets/post_author.dart';
+import '../widgets/post_comment_field.dart';
 import '../widgets/post_content.dart';
 import '../widgets/post_settings_menu.dart';
 import 'edit_post_screen.dart';
@@ -110,43 +111,20 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             }
           }
 
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SizedBox(
-                      height: 500,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const Text('Modal BottomSheet'),
-                            ElevatedButton(
-                              child: const Text('Close BottomSheet'),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: const Icon(Icons.edit),
-            ),
-            appBar: AppBar(
-              iconTheme: const IconThemeData(color: Colors.white),
-              title: Text(
-                'Post',
-                style: Theme.of(context).textTheme.titleLarge,
+          return SafeArea(
+            top: false,
+            child: Scaffold(
+              bottomSheet:
+                  state.isAuthenticated ? const PostCommentField() : null,
+              appBar: AppBar(
+                iconTheme: const IconThemeData(color: Colors.white),
+                title: Text(
+                  'Post',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                actions: actions,
               ),
-              actions: actions,
-            ),
-            body: SafeArea(
-              child: BlocBuilder<PostDetailsBloc, PostDetailsState>(
+              body: BlocBuilder<PostDetailsBloc, PostDetailsState>(
                 builder: (context, state) {
                   switch (state.status) {
                     case PostDetailsStatus.initial:
@@ -163,6 +141,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                       }
 
                       return SingleChildScrollView(
+                        padding: const EdgeInsets.only(bottom: 80),
                         child: Padding(
                           // only apply padding at the top and bottom
                           padding: const EdgeInsets.symmetric(vertical: 15),
@@ -176,7 +155,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     PostAuthor(
-                                        author: state.postDetails!.author),
+                                      author: state.postDetails!.author,
+                                    ),
                                     const SizedBox(height: 10),
                                     PostContent(
                                       content: state.postDetails!.content,
@@ -193,7 +173,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                     const PostSeparator(padding: 10),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
+                                        horizontal: 15,
+                                      ),
                                       child: Text(
                                         'Commentaires',
                                         style: Theme.of(context)
@@ -202,41 +183,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 20),
-                                    Builder(builder: (context) {
-                                      if (state.postDetails!.comments.isEmpty) {
-                                        return Center(
-                                          child: Text(
-                                            'Aucun commentaire trouvé pour ce post.',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
-                                          ),
-                                        );
-                                      }
-
-                                      return Column(
-                                        children: [
-                                          ...state.postDetails!.comments
-                                              .map((comment) => Column(
-                                                    children: [
-                                                      PostCommentPreview(
-                                                        comment: comment,
-                                                      ),
-                                                      const PostSeparator(
-                                                          padding: 10),
-                                                    ],
-                                                  )),
-                                          Center(
-                                            child: Text(
-                                              'Aucun autre commentaire trouvé.',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }),
+                                    PostCommentList(
+                                      comments:
+                                          state.postDetails?.comments ?? [],
+                                    ),
                                   ],
                                 );
                               }),
