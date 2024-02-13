@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
+import 'package:hollychat/posts/bloc/post_bloc/post_bloc.dart';
 import 'package:hollychat/posts/widgets/post_comment.dart';
 import 'package:hollychat/posts/widgets/post_separator.dart';
 
@@ -10,6 +11,8 @@ import '../bloc/post_details_bloc/post_details_bloc.dart';
 import '../widgets/delete_alert_dialog.dart';
 import '../widgets/post_author.dart';
 import '../widgets/post_content.dart';
+import '../widgets/post_settings_menu.dart';
+import 'edit_post_screen.dart';
 
 class PostDetailsScreen extends StatefulWidget {
   const PostDetailsScreen({super.key, required this.post});
@@ -30,6 +33,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    _getPost();
+  }
+
+  void _getPost() {
     final postsBloc = BlocProvider.of<PostDetailsBloc>(context);
     postsBloc.add(LoadPostDetailsById(postId: widget.post.id));
   }
@@ -46,11 +53,18 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     );
   }
 
-  void _onDeleteTap() {
-    _showAlertDialog();
+  _onItemSelected(MenuItemType value, BuildContext context) {
+    switch (value) {
+      case MenuItemType.edit:
+        EditPostScreen.navigateTo(context, widget.post);
+        break;
+      case MenuItemType.delete:
+        showAlertDialog(context);
+        break;
+    }
   }
 
-  _showAlertDialog() {
+  showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -64,27 +78,33 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<DeletePostBloc, DeletePostState>(
-      listener: (context, state) {
-        if (state.status == DeletePostStatus.success) {
-          _onPostDeleted(context);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<DeletePostBloc, DeletePostState>(
+          listener: (context, state) {
+            if (state.status == DeletePostStatus.success) {
+              _onPostDeleted(context);
+            }
+          },
+        ),
+        BlocListener<PostBloc, PostState>(
+          listener: (context, state) {
+            if (state.status == PostStatus.success) {
+              _getPost();
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           final List<Widget> actions = [];
 
           if (state.isAuthenticated) {
             if (state.user!.id == widget.post.author.id) {
-              actions.add(
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.redAccent,
-                  ),
-                  onPressed: () => _onDeleteTap(),
-                ),
-              );
+              actions.add(PostSettingsMenu(
+                onItemSelected: (itemType) =>
+                    _onItemSelected(itemType, context),
+              ));
             }
           }
 
