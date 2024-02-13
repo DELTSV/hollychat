@@ -65,10 +65,21 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return file;
   }
 
+  _editPost() {
+    if (_canEditPost()) {
+      print("object");
+    }
+  }
+
   _getEditButton() {
+    bool canEdit = _canEditPost();
+
     return IconButton(
-      onPressed: () {},
-      icon: const Icon(Icons.edit),
+      onPressed: canEdit ? _editPost : null,
+      icon: Icon(
+        Icons.edit,
+        color: canEdit ? Colors.white : Colors.grey[600],
+      ),
     );
   }
 
@@ -93,6 +104,12 @@ class _EditPostScreenState extends State<EditPostScreen> {
         child: CircularProgressIndicator(),
       );
     }
+  }
+
+  _canEditPost() {
+    bool contentChanged = _content != _defaultContent;
+    bool imageChanged = _imageSelected != _defaultImage;
+    return _content.isNotEmpty && (contentChanged || imageChanged);
   }
 
   @override
