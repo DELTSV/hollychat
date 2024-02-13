@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:hollychat/models/full_post.dart';
-import 'package:hollychat/posts/services/posts_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/minimal_post.dart';
+import '../../../models/minimal_post.dart';
+import 'comments_data_source.dart';
 
-class PostsApiDataSource extends PostsDataSource {
+class CommentsApiDataSource extends CommentsDataSource {
   final dio = Dio(
     BaseOptions(
       baseUrl: 'https://xoc1-kd2t-7p9b.n7c.xano.io/api:xbcc5VEi/post',

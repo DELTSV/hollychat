@@ -14,7 +14,8 @@ import 'package:hollychat/posts/screens/edit_post_screen.dart';
 import 'package:hollychat/posts/screens/image_screen.dart';
 import 'package:hollychat/posts/screens/post_details_screen.dart';
 import 'package:hollychat/posts/screens/posts_screen.dart';
-import 'package:hollychat/posts/services/posts_api_data_source.dart';import 'package:hollychat/posts/services/posts_repository.dart';
+import 'package:hollychat/posts/services/posts/posts_api_data_source.dart';
+import 'package:hollychat/posts/services/posts/posts_repository.dart';
 
 import 'models/minimal_post.dart';
 import 'models/post_image.dart';

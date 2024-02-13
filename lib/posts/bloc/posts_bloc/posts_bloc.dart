@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/minimal_post.dart';
-import '../../services/posts_repository.dart';
+import '../../services/posts/posts_repository.dart';
 
 part 'posts_event.dart';
 part 'posts_state.dart';

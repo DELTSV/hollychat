@@ -1,12 +1,12 @@
-import 'package:hollychat/posts/services/posts_data_source.dart';
 
-import '../../models/full_post.dart';
-import '../../models/minimal_post.dart';
+import '../../../models/full_post.dart';
+import '../../../models/minimal_post.dart';
+import 'comments_data_source.dart';
 
-class PostsRepository {
-  final PostsDataSource postsDataSource;
+class CommentsRepository {
+  final CommentsDataSource postsDataSource;
 
-  PostsRepository({required this.postsDataSource});
+  CommentsRepository({required this.postsDataSource});
 
   Future<List<MinimalPost>> getAllPostsWithPagination(
       int pageNumber, int numberOfPostsPerRequest) async {

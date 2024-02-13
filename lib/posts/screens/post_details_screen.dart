@@ -101,14 +101,42 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
           if (state.isAuthenticated) {
             if (state.user!.id == widget.post.author.id) {
-              actions.add(PostSettingsMenu(
-                onItemSelected: (itemType) =>
-                    _onItemSelected(itemType, context),
-              ));
+              actions.add(
+                PostSettingsMenu(
+                  onItemSelected: (itemType) =>
+                      _onItemSelected(itemType, context),
+                ),
+              );
             }
           }
 
           return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                      height: 500,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Text('Modal BottomSheet'),
+                            ElevatedButton(
+                              child: const Text('Close BottomSheet'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: const Icon(Icons.edit),
+            ),
             appBar: AppBar(
               iconTheme: const IconThemeData(color: Colors.white),
               title: Text(

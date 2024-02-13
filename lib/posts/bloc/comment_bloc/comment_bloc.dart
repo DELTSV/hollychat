@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 
 import '../../services/posts/posts_repository.dart';
 
-part 'delete_post_event.dart';
-part 'delete_post_state.dart';
+part 'comment_event.dart';
+part 'comment_state.dart';
 
-class DeletePostBloc extends Bloc<DeletePostEvent, DeletePostState> {
+class CommentBloc extends Bloc<CommentEvent, CommentState> {
   final PostsRepository postsRepository;
 
-  DeletePostBloc({required this.postsRepository}) : super(DeletePostState()) {
-    on<DeletePost>(_onDeletePost);
+  CommentBloc({required this.postsRepository}) : super(CommentState()) {
+    on<AddComment>(_onDeletePost);
   }
 
   void _onDeletePost(
-    DeletePost event,
-    Emitter<DeletePostState> emit,
+    AddComment event,
+    Emitter<CommentState> emit,
   ) async {
     if (state.status != DeletePostStatus.loading) {
       emit(state.copyWith(status: DeletePostStatus.loading));
 
       try {
         await postsRepository.deletePost(
-          event.id,
+          event.postId,
         );
 
         emit(
