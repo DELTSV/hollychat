@@ -6,8 +6,10 @@ class MinimalPost extends Post {
   MinimalPost({
     required super.id,
     required super.content,
+    required super.originalText,
     required super.author,
-    super.image,
+    required super.image,
+    required super.linkImages,
     required this.commentsCount,
   });
 
@@ -17,8 +19,10 @@ class MinimalPost extends Post {
     return MinimalPost(
       id: post.id,
       content: post.content,
+      originalText: post.originalText,
       author: post.author,
       image: post.image,
+      linkImages: post.linkImages,
       commentsCount: json['comments_count'],
     );
   }

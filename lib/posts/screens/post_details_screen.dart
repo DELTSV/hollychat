@@ -133,6 +133,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                     PostContent(
                                       content: state.postDetails!.content,
                                       image: state.postDetails!.image,
+                                      linkImages: state.postDetails!.linkImages,
                                     ),
                                   ],
                                 ),

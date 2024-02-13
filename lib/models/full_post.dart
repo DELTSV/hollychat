@@ -7,8 +7,10 @@ class FullPost extends Post {
   FullPost({
     required super.id,
     required super.content,
+    required super.originalText,
     required super.author,
     super.image,
+    required super.linkImages,
     required this.comments,
   });
 
@@ -18,8 +20,10 @@ class FullPost extends Post {
     return FullPost(
       id: post.id,
       content: post.content,
+      originalText: post.originalText,
       author: post.author,
       image: post.image,
+      linkImages: post.linkImages,
       comments: (json['comments'] as List)
           .map((comment) => PostComment.fromJson(comment))
           .toList(),

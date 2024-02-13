@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/models/author.dart';
 import 'package:hollychat/models/minimal_post.dart';
@@ -160,7 +159,7 @@ class PostPreview extends StatelessWidget {
                 _compareUserAuthor(state.user, post.author),
               ),
               const SizedBox(height: 10),
-              PostContent(content: post.content, image: post.image),
+              PostContent(content: post.content, image: post.image, linkImages: post.linkImages,),
             ],
           );
         }),

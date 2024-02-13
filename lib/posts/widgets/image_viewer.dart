@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hollychat/models/post_image.dart';
+import 'package:hollychat/posts/widgets/link_message.dart';
 
 import '../screens/image_screen.dart';
 
@@ -55,6 +56,12 @@ class _ImageViewerState extends State<ImageViewer> {
           height: height,
           width: containerWidth,
           fit: BoxFit.contain,
+          errorBuilder:
+              (BuildContext context, Object exception, StackTrace? stackTrace) {
+            return RichText(
+              text: linkMessage(widget.postImage.url, null),
+            );
+          },
           loadingBuilder: (
             BuildContext context,
             Widget child,

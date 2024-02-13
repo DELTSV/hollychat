@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/auth/bloc/auth_bloc.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key, required this.onSubmit});

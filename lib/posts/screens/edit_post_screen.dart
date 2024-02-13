@@ -38,7 +38,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   @override
   void initState() {
     super.initState();
-    _defaultContent = widget.post.content;
+    _defaultContent = widget.post.originalText;
     if (widget.post.image != null) {
       urlToFile(widget.post.image?.url ?? "").then(
         (value) => setState(() {
