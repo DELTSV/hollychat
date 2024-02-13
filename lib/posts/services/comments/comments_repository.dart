@@ -4,29 +4,11 @@ import '../../../models/minimal_post.dart';
 import 'comments_data_source.dart';
 
 class CommentsRepository {
-  final CommentsDataSource postsDataSource;
+  final CommentsDataSource commentsDataSource;
 
-  CommentsRepository({required this.postsDataSource});
+  CommentsRepository({required this.commentsDataSource});
 
-  Future<List<MinimalPost>> getAllPostsWithPagination(
-      int pageNumber, int numberOfPostsPerRequest) async {
-    return postsDataSource.getAllPostsWithPagination(
-        pageNumber, numberOfPostsPerRequest);
-  }
-
-  Future<FullPost> getPostDetailsById(int postId) async {
-    return postsDataSource.getPostDetailsById(postId);
-  }
-
-  Future<void> createPost(String content, List<int> imageBytes) async {
-    return postsDataSource.createPost(content, imageBytes);
-  }
-
-  Future<void> deletePost(int postId) async {
-    return postsDataSource.deletePost(postId);
-  }
-
-  Future<void> updatePost(int postId, String content, List<int> imageBytes) async {
-    return postsDataSource.updatePost(postId, content, imageBytes);
+  Future<void> createComment(int postId, String content) async {
+    return commentsDataSource.createComment(postId, content);
   }
 }

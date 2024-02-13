@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PostCommentField extends StatefulWidget {
-  const PostCommentField({super.key});
+  const PostCommentField({
+    super.key,
+    required this.onSubmitted,
+    required this.authorName,
+  });
+
+  final void Function(String content) onSubmitted;
+  final String authorName;
 
   @override
   State<PostCommentField> createState() => _PostCommentFieldState();
@@ -28,6 +35,13 @@ class _PostCommentFieldState extends State<PostCommentField> {
 
   bool canSubmit() {
     return _commentContent.isNotEmpty;
+  }
+
+  _onCommentSubmitted() {
+    if (canSubmit()) {
+      widget.onSubmitted(_commentContent);
+      _controller.clear();
+    }
   }
 
   @override
@@ -60,7 +74,7 @@ class _PostCommentFieldState extends State<PostCommentField> {
                   maxLines: null,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Quoi de neuf mon reuf ?',
+                    hintText: 'Répondre à ${widget.authorName}',
                     hintStyle: TextStyle(
                       color: Colors.grey[500],
                     ),
@@ -70,10 +84,12 @@ class _PostCommentFieldState extends State<PostCommentField> {
               ),
               // Second child is button
               IconButton(
-                icon: Icon(Icons.send,
-                    color: canSubmit() ? Colors.white : Colors.grey[600]),
+                icon: Icon(
+                  Icons.send,
+                  color: canSubmit() ? Colors.white : Colors.grey[600],
+                ),
                 iconSize: 25.0,
-                onPressed: () => {},
+                onPressed: _onCommentSubmitted,
               )
             ],
           ),

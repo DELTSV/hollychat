@@ -1,6 +1,6 @@
 part of 'comment_bloc.dart';
 
-enum DeletePostStatus {
+enum CommentStatus {
   initial,
   loading,
   success,
@@ -8,14 +8,14 @@ enum DeletePostStatus {
 }
 
 class CommentState {
-  final DeletePostStatus status;
+  final CommentStatus status;
 
   CommentState({
-    this.status = DeletePostStatus.initial,
+    this.status = CommentStatus.initial,
   });
 
   CommentState copyWith({
-    DeletePostStatus? status,
+    CommentStatus? status,
   }) {
     return CommentState(
       status: status ?? this.status,

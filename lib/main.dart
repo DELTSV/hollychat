@@ -5,6 +5,7 @@ import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/auth/screens/sign_in_screen.dart';
 import 'package:hollychat/auth/services/auth_api_data_source.dart';
 import 'package:hollychat/auth/services/auth_repository.dart';
+import 'package:hollychat/posts/bloc/comment_bloc/comment_bloc.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/bloc/post_bloc/post_bloc.dart';
 import 'package:hollychat/posts/bloc/post_details_bloc/post_details_bloc.dart';
@@ -14,6 +15,9 @@ import 'package:hollychat/posts/screens/edit_post_screen.dart';
 import 'package:hollychat/posts/screens/image_screen.dart';
 import 'package:hollychat/posts/screens/post_details_screen.dart';
 import 'package:hollychat/posts/screens/posts_screen.dart';
+import 'package:hollychat/posts/services/comments/comments_api_data_source.dart';
+import 'package:hollychat/posts/services/comments/comments_data_source.dart';
+import 'package:hollychat/posts/services/comments/comments_repository.dart';
 import 'package:hollychat/posts/services/posts/posts_api_data_source.dart';
 import 'package:hollychat/posts/services/posts/posts_repository.dart';
 
@@ -51,6 +55,10 @@ class HollyChatApp extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (context) =>
+              CommentsRepository(commentsDataSource: CommentsApiDataSource()),
+        ),
+        RepositoryProvider(
+          create: (context) =>
               AuthRepository(authDataSource: AuthApiDataSource()),
         ),
       ],
@@ -81,6 +89,11 @@ class HollyChatApp extends StatelessWidget {
               authRepository: context.read<AuthRepository>(),
               noAuthCallback: () =>
                   navigatorKey.currentState!.pushNamed('/login'),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => CommentBloc(
+              commentsRepository: context.read<CommentsRepository>(),
             ),
           ),
         ],

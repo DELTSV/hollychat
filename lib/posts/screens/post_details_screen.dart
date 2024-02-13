@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
+import 'package:hollychat/posts/bloc/comment_bloc/comment_bloc.dart';
 import 'package:hollychat/posts/bloc/post_bloc/post_bloc.dart';
 import 'package:hollychat/posts/widgets/post_comment_list.dart';
 import 'package:hollychat/posts/widgets/post_separator.dart';
@@ -54,6 +55,15 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     );
   }
 
+  void _onCommentAdded(BuildContext context) {
+    _getPost();
+  }
+
+  void onSubmittedComment(int postId, String text) {
+    final commentBloc = BlocProvider.of<CommentBloc>(context);
+    commentBloc.add(AddComment(postId: postId, content: text));
+  }
+
   _onItemSelected(MenuItemType value, BuildContext context) {
     switch (value) {
       case MenuItemType.edit:
@@ -95,6 +105,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             }
           },
         ),
+        BlocListener<CommentBloc, CommentState>(
+          listener: (context, state) {
+            if (state.status == CommentStatus.success) {
+              _onCommentAdded(context);
+            }
+          },
+        ),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
@@ -114,8 +131,15 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           return SafeArea(
             top: false,
             child: Scaffold(
-              bottomSheet:
-                  state.isAuthenticated ? const PostCommentField() : null,
+              bottomSheet: state.isAuthenticated
+                  ? PostCommentField(
+                      onSubmitted: (String text) => onSubmittedComment(
+                        widget.post.id,
+                        text,
+                      ),
+                      authorName: widget.post.author.username,
+                    )
+                  : null,
               appBar: AppBar(
                 iconTheme: const IconThemeData(color: Colors.white),
                 title: Text(

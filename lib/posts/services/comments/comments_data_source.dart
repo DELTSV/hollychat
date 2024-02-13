@@ -3,14 +3,5 @@ import 'package:hollychat/models/full_post.dart';
 import '../../../models/minimal_post.dart';
 
 abstract class CommentsDataSource {
-  Future<List<MinimalPost>> getAllPostsWithPagination(
-      int pageNumber, int numberOfPostsPerRequest);
-
-  Future<FullPost> getPostDetailsById(int postId);
-
-  Future<void> createPost(String content, List<int> imageBytes);
-
-  Future<void> deletePost(int postId);
-
-  Future<void> updatePost(int postId, String content, List<int> imageBytes);
+  Future<void> createComment(int postId, String content);
 }
