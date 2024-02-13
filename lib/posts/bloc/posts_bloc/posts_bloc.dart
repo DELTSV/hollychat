@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../models/minimal_post.dart';
 import '../../services/posts_repository.dart';
-import '../delete_post_bloc/delete_post_bloc.dart';
 
 part 'posts_event.dart';
 part 'posts_state.dart';
@@ -11,19 +10,11 @@ part 'posts_state.dart';
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
   final PostsRepository postsRepository;
   final int numberOfPostsPerRequest = 10;
-  final DeletePostBloc deletePostBloc;
 
-  PostsBloc({required this.postsRepository, required this.deletePostBloc})
+  PostsBloc({required this.postsRepository})
       : super(PostsState()) {
     on<LoadNextPostPage>(_onLoadPosts);
     on<RefreshPosts>(_onRefreshPosts);
-
-    deletePostBloc.stream.listen((deletePostState) {
-      print("deletePostState: $deletePostState");
-      if (deletePostState.status == DeletePostStatus.success) {
-        add(RefreshPosts());
-      }
-    });
   }
 
   void _onLoadPosts(LoadNextPostPage event, Emitter<PostsState> emit) async {

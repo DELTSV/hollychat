@@ -69,7 +69,6 @@ class HollyChatApp extends StatelessWidget {
             create: (context) =>
                 PostsBloc(
                   postsRepository: context.read<PostsRepository>(),
-                  deletePostBloc: BlocProvider.of<DeletePostBloc>(context),
                 ),
           ),
           BlocProvider(
