@@ -23,6 +23,14 @@ class AuthState {
     );
   }
 
+  AuthState reset() {
+    return AuthState(
+      token: null,
+      user: null,
+      noAuthCallback: noAuthCallback,
+    );
+  }
+
   bool get isAuthenticated => user != null;
   bool get isNotAuthenticated => user == null;
 }

@@ -12,11 +12,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required this.authRepository,
     Function? noAuthCallback,
-  }) : super(AuthState(noAuthCallback: noAuthCallback),) {
+  }) : super(AuthState(noAuthCallback: noAuthCallback)) {
     on<SignUp>(_onSigningUp);
     on<Login>(_onLogin);
     on<GetUser>(_onGetUser);
     on<GetToken>(_onGetToken);
+    on<LogOut>(_onLogOut);
 
     add(GetToken());
   }
@@ -81,6 +82,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (error) {
       rethrow;
     }
+  }
+
+  void _onLogOut(LogOut event, Emitter<AuthState> emit) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("auth_token");
+    emit(state.reset());
   }
 
   Future<String?> _getToken() async {
