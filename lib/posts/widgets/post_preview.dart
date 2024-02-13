@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/models/author.dart';
 import 'package:hollychat/models/minimal_post.dart';
@@ -9,6 +10,7 @@ import 'package:hollychat/posts/widgets/post_content.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 import '../../models/user.dart';
+import '../screens/edit_post_screen.dart';
 
 class MenuItem {
   const MenuItem({
@@ -72,6 +74,7 @@ class PostPreview extends StatelessWidget {
   _onItemSelected(MenuItemType value, BuildContext context) {
     switch (value) {
       case MenuItemType.edit:
+        EditPostScreen.navigateTo(context, post);
         break;
       case MenuItemType.delete:
         showAlertDialog(context);
@@ -80,9 +83,11 @@ class PostPreview extends StatelessWidget {
   }
 
   _onDeletePost(BuildContext context) {
-    BlocProvider.of<DeletePostBloc>(context).add(DeletePost(
-      id: post.id,
-    ));
+    BlocProvider.of<DeletePostBloc>(context).add(
+      DeletePost(
+        id: post.id,
+      ),
+    );
   }
 
   void _onPostDeleted(BuildContext context) {

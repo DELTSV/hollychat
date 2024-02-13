@@ -39,8 +39,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     deletePostBloc.add(DeletePost(id: widget.post.id));
   }
 
-  void _onPostDeleted() {
-    Navigator.of(context).pop();
+  void _onPostDeleted(BuildContext context) {
+    Navigator.popUntil(
+      context,
+      ModalRoute.withName('/'),
+    );
   }
 
   void _onDeleteTap() {
@@ -64,7 +67,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     return BlocListener<DeletePostBloc, DeletePostState>(
       listener: (context, state) {
         if (state.status == DeletePostStatus.success) {
-          _onPostDeleted();
+          _onPostDeleted(context);
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(

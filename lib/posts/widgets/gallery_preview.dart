@@ -42,6 +42,7 @@ class GalleryPreview extends StatelessWidget {
     return SizedBox(
       height: 100,
       child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         scrollDirection: Axis.horizontal,
         itemCount: items.length,
         separatorBuilder: (BuildContext context, int index) {

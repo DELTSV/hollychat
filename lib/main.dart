@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/auth/bloc/auth_bloc.dart';
+import 'package:hollychat/auth/screens/sign_in_screen.dart';
+import 'package:hollychat/auth/services/auth_api_data_source.dart';
+import 'package:hollychat/auth/services/auth_repository.dart';
 import 'package:hollychat/posts/bloc/add_post_bloc/add_post_bloc.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/bloc/post_details_bloc/post_details_bloc.dart';
 import 'package:hollychat/posts/bloc/posts_bloc/posts_bloc.dart';
 import 'package:hollychat/posts/screens/add_post_screen.dart';
-
-
+import 'package:hollychat/posts/screens/edit_post_screen.dart';
 import 'package:hollychat/posts/screens/image_screen.dart';
 import 'package:hollychat/posts/screens/post_details_screen.dart';
 import 'package:hollychat/posts/screens/posts_screen.dart';
-
-import 'package:hollychat/auth/bloc/auth_bloc.dart';
-import 'package:hollychat/auth/screens/sign_in_screen.dart';
-import 'package:hollychat/auth/services/auth_api_data_source.dart';
-import 'package:hollychat/auth/services/auth_repository.dart';
-import 'package:hollychat/posts/services/posts_api_data_source.dart';
-
-import 'package:hollychat/posts/services/posts_repository.dart';
+import 'package:hollychat/posts/services/posts_api_data_source.dart';import 'package:hollychat/posts/services/posts_repository.dart';
 
 import 'models/minimal_post.dart';
 import 'models/post_image.dart';
@@ -60,36 +56,31 @@ class HollyChatApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                DeletePostBloc(
-                  postsRepository: context.read<PostsRepository>(),
-                ),
+            create: (context) => DeletePostBloc(
+              postsRepository: context.read<PostsRepository>(),
+            ),
           ),
           BlocProvider(
-            create: (context) =>
-                PostsBloc(
-                  postsRepository: context.read<PostsRepository>(),
-                ),
+            create: (context) => PostsBloc(
+              postsRepository: context.read<PostsRepository>(),
+            ),
           ),
           BlocProvider(
-            create: (context) =>
-                PostDetailsBloc(
-                  postsRepository: context.read<PostsRepository>(),
-                ),
+            create: (context) => PostDetailsBloc(
+              postsRepository: context.read<PostsRepository>(),
+            ),
           ),
           BlocProvider(
-            create: (context) =>
-                AddPostBloc(
-                  postsRepository: context.read<PostsRepository>(),
-                ),
+            create: (context) => AddPostBloc(
+              postsRepository: context.read<PostsRepository>(),
+            ),
           ),
           BlocProvider(
-            create: (context) =>
-                AuthBloc(
-                  authRepository: context.read<AuthRepository>(),
-                  noAuthCallback: () =>
-                      navigatorKey.currentState!.pushNamed('/signup'),
-                ),
+            create: (context) => AuthBloc(
+              authRepository: context.read<AuthRepository>(),
+              noAuthCallback: () =>
+                  navigatorKey.currentState!.pushNamed('/login'),
+            ),
           ),
         ],
         child: MaterialApp(
@@ -97,7 +88,7 @@ class HollyChatApp extends StatelessWidget {
           onGenerateRoute: _getRoute,
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
-            '/signup': (context) => const SignInScreen(),
+            '/login': (context) => const SignInScreen(),
           },
           navigatorKey: navigatorKey,
         ),
@@ -124,6 +115,16 @@ Route? _getRoute(RouteSettings settings) {
       break;
     case AddPostScreen.routeName:
       return _createAddPostRoute(const AddPostScreen());
+    case EditPostScreen.routeName:
+      final arguments = settings.arguments;
+      if (arguments is MinimalPost) {
+        return _createEditPostRoute(
+          EditPostScreen(
+            post: arguments,
+          ),
+        );
+      }
+      break;
   }
 
   return null;
@@ -135,6 +136,24 @@ Route _createImageRoute(final Widget content) {
     barrierColor: Colors.white.withOpacity(0),
     pageBuilder: (BuildContext context, _, __) {
       return content;
+    },
+  );
+}
+
+Route _createEditPostRoute(final Widget content) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => content,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1, 0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
     },
   );
 }

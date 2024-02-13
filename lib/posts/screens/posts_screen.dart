@@ -74,7 +74,7 @@ class _PostsScreenState extends State<PostsScreen> {
               }
 
               return TextButton(
-                onPressed: () => print(state.token),
+                onPressed: () => Navigator.pushNamed(context, '/login'),
                 child: const Text("Connexion"),
               );
             },
