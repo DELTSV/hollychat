@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/models/post_comment.dart';
+import 'package:hollychat/models/user.dart';
 import 'package:hollychat/posts/widgets/post_author.dart';
 import 'package:hollychat/posts/widgets/settings_menu.dart';
 
@@ -27,6 +30,10 @@ class PostCommentPreview extends StatelessWidget {
     }
   }
 
+  bool _isAuthor(User? user, PostComment author) {
+    return user?.id == author.author.id;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,9 +46,17 @@ class PostCommentPreview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               PostAuthor(author: comment.author),
-              SettingsMenu(
-                onItemSelected: (itemType) =>
-                    _onItemSelected(itemType, context),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (_isAuthor(state.user, comment)) {
+                    return SettingsMenu(
+                      onItemSelected: (itemType) =>
+                          _onItemSelected(itemType, context),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                },
               ),
             ],
           ),

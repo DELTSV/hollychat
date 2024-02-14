@@ -131,7 +131,6 @@ class _PostFormState extends State<PostForm> {
   Future<void> _loadImages() async {
     try {
       const MethodChannel _channel = MethodChannel('image_gallery');
-      // Pass the count argument to the platform method
       final List<dynamic>? result = await _channel.invokeMethod<List<dynamic>>(
         'getImages',
         <String, dynamic>{'count': 8},
@@ -152,35 +151,38 @@ class _PostFormState extends State<PostForm> {
       return const SizedBox();
     }
 
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.file(
-            _imageSelected!,
-            fit: BoxFit.contain,
-          ),
-        ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: GestureDetector(
-            onTap: () {
-              resetImage();
-            },
-            child: IconButton(
-              icon: const Icon(
-                Icons.cancel,
-                color: Colors.white,
-                size: 30,
-              ),
-              onPressed: () => setState(() {
-                resetImage();
-              }),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.file(
+              _imageSelected!,
+              fit: BoxFit.contain,
             ),
           ),
-        ),
-      ],
+          Positioned(
+            top: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
+                resetImage();
+              },
+              child: IconButton(
+                icon: const Icon(
+                  Icons.cancel,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onPressed: () => setState(() {
+                  resetImage();
+                }),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
