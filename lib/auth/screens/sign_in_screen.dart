@@ -36,23 +36,29 @@ class SignInScreen extends StatelessWidget {
                 isLoading: state.status == AuthStatus.loading,
               ),
             ),
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(
-                      image: AssetImage('assets/images/logo.png'),
-                      height: 30,
+            body: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 500,
+              ),
+              child: Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Image(
+                          image: AssetImage('assets/images/logo.png'),
+                          height: 35,
+                        ),
+                        // const Spacer(),
+                        AuthForm(
+                          onSubmit: (email, password) =>
+                              _onLogin(context, email, password), isLoading: state.status == AuthStatus.loading,
+                        ),
+                      ],
                     ),
-                    // const Spacer(),
-                    AuthForm(
-                      onSubmit: (email, password) =>
-                          _onLogin(context, email, password), isLoading: state.status == AuthStatus.loading,
-                    ),
-                    const Spacer(),
-                  ],
+                  ),
                 ),
               ),
             ),

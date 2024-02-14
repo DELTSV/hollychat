@@ -63,79 +63,78 @@ class _AuthFormState extends State<AuthForm> {
           );
         }
       },
-      child: ConstrainedBox(
-        constraints: const BoxConstraints.expand(height: 300, width: 400),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              onChanged: () {
-                setState(() {
-                  _errorText = null;
-                });
-              },
-              child: Column(
-                children: [
-                  TextFormField(
-                    autofillHints: const [AutofillHints.email],
-                    autofocus: true,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      hintText: "Email",
-                      helperText: "Enter votre email",
-                      errorText: _errorText,
-                    ),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "L'email ne peut pas être vide";
-                      }
-                      return null;
-                    },
-                    controller: _emailController,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            onChanged: () {
+              setState(() {
+                _errorText = null;
+              });
+            },
+            child: Column(
+              children: [
+                TextFormField(
+                  autofillHints: const [AutofillHints.email],
+                  autofocus: true,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    hintText: "Email",
+                    helperText: "Enter votre email",
+                    errorText: _errorText,
                   ),
-                  const Spacer(),
-                  TextFormField(
-                    autofillHints: const [AutofillHints.password],
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      labelText: "Mot de passe",
-                      hintText: "Mot de passe",
-                      helperText: "Entrer votre mot de passe",
-                      errorText: _errorText,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: _onSwitchPasswordVisibility,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "L'email ne peut pas être vide";
+                    }
+                    return null;
+                  },
+                  controller: _emailController,
+                ),
+                // const Spacer(),
+                TextFormField(
+                  autofillHints: const [AutofillHints.password],
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelText: "Mot de passe",
+                    hintText: "Mot de passe",
+                    helperText: "Entrer votre mot de passe",
+                    errorText: _errorText,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
+                      onPressed: _onSwitchPasswordVisibility,
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Le mot de passe ne peut pas être vide";
-                      }
-
-                      // if (value.length < 8) {
-                      //   return "Le mot de passe doit contenir au moins 8 caractères";
-                      // }
-
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: _passwordController,
-                    obscureText: !_passwordVisible,
                   ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: widget.isLoading ? null : _handleFormSubmit,
-                    child: const Text("Se connecter"),
-                  ),
-                ],
-              ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Le mot de passe ne peut pas être vide";
+                    }
+
+                    // if (value.length < 8) {
+                    //   return "Le mot de passe doit contenir au moins 8 caractères";
+                    // }
+
+                    return null;
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: _passwordController,
+                  obscureText: !_passwordVisible,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: widget.isLoading ? null : _handleFormSubmit,
+                  child: const Text("Se connecter"),
+                ),
+              ],
             ),
           ),
         ),
