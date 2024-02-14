@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 import '../bloc/post_bloc/post_bloc.dart';
+import '../widgets/linear_progress_bar.dart';
 
 class EditPostScreen extends StatefulWidget {
   const EditPostScreen({super.key, required this.post});
@@ -128,32 +129,39 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.close),
-        ),
-        actions: [_getEditButton()],
-        title: Text(
-          'Editer le post',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
-      body: BlocListener<PostBloc, PostState>(
-        listener: (context, state) {
-          if (state.status == PostStatus.success) {
-            Navigator.of(context).pop();
-          }
-        },
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: _getPostForm(),
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: const IconThemeData(color: Colors.white),
+            leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.close),
+            ),
+            actions: [_getEditButton()],
+            title: Text(
+              'Editer le post',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            bottom: LinearProgressBar(
+              isLoading: state.status == PostStatus.loading,
+            ),
           ),
-        ),
-      ),
+          body: BlocListener<PostBloc, PostState>(
+            listener: (context, state) {
+              if (state.status == PostStatus.success) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                child: _getPostForm(),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

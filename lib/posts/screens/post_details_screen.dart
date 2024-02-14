@@ -11,6 +11,7 @@ import '../../models/post_comment.dart';
 import '../bloc/delete_post_bloc/delete_post_bloc.dart';
 import '../bloc/post_details_bloc/post_details_bloc.dart';
 import '../widgets/delete_alert_dialog.dart';
+import '../widgets/linear_progress_bar.dart';
 import '../widgets/post_author.dart';
 import '../widgets/post_comment_field.dart';
 import '../widgets/post_content.dart';
@@ -125,8 +126,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     );
   }
 
-  Widget? _buildFloatingButton(bool isAuthenticated) {
-    if (!isAuthenticated) {
+  Widget? _buildFloatingButton(bool show) {
+    if (!show) {
       return null;
     }
 
@@ -167,11 +168,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         ),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
+        builder: (context, authState) {
           final List<Widget> actions = [];
 
-          if (state.isAuthenticated) {
-            if (state.user!.id == widget.post.author.id) {
+          if (authState.isAuthenticated) {
+            if (authState.user!.id == widget.post.author.id) {
               actions.add(
                 SettingsMenu(
                   onItemSelected: (itemType) =>
@@ -183,72 +184,94 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
           return SafeArea(
             top: false,
-            child: Scaffold(
-              bottomSheet: _buildFloatingButton(state.isAuthenticated),
-              appBar: AppBar(
-                iconTheme: const IconThemeData(color: Colors.white),
-                title: Text(
-                  'Post',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                actions: actions,
-              ),
-              body: BlocBuilder<PostDetailsBloc, PostDetailsState>(
-                builder: (context, state) {
-                  switch (state.status) {
-                    case PostDetailsStatus.initial:
-                      return const SizedBox();
-                    case PostDetailsStatus.loading:
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    case PostDetailsStatus.success:
-                      if (state.postDetails == null) {
-                        return const Center(
-                          child: Text('Oups, une erreur est survenue.'),
-                        );
-                      }
+            child: BlocBuilder<DeletePostBloc, DeletePostState>(
+              builder: (context, deletePostState) {
+                return BlocBuilder<CommentBloc, CommentState>(
+                  builder: (context, commentState) {
+                    bool isLoading =
+                        deletePostState.status == DeletePostStatus.loading ||
+                            commentState.status == CommentStatus.loading;
 
-                      return SingleChildScrollView(
-                        padding: const EdgeInsets.only(bottom: 80),
-                        child: Padding(
-                          // only apply padding at the top and bottom
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    PostAuthor(
-                                      author: state.postDetails!.author,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    PostContent(
-                                      content: state.postDetails!.content,
-                                      image: state.postDetails!.image,
-                                      linkImages: state.postDetails!.linkImages,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              _buildComments(
-                                state.postDetails?.comments ?? [],
-                              ),
-                            ],
-                          ),
+                    return Scaffold(
+                      bottomSheet: _buildFloatingButton(
+                        authState.isAuthenticated && !isLoading,
+                      ),
+                      appBar: AppBar(
+                        iconTheme: const IconThemeData(color: Colors.white),
+                        title: Text(
+                          'Post',
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                      );
-                    case PostDetailsStatus.error:
-                      return const Center(
-                        child: Text('Oups, une erreur est survenue.'),
-                      );
-                  }
-                },
-              ),
+                        actions: actions,
+                        bottom: LinearProgressBar(
+                          isLoading: isLoading,
+                        ),
+                      ),
+                      body: BlocBuilder<PostDetailsBloc, PostDetailsState>(
+                        builder: (context, state) {
+                          switch (state.status) {
+                            case PostDetailsStatus.initial:
+                              return const SizedBox();
+                            case PostDetailsStatus.loading:
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            case PostDetailsStatus.success:
+                              if (state.postDetails == null) {
+                                return const Center(
+                                  child: Text('Oups, une erreur est survenue.'),
+                                );
+                              }
+
+                              return SingleChildScrollView(
+                                padding: const EdgeInsets.only(bottom: 80),
+                                child: Padding(
+                                  // only apply padding at the top and bottom
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            PostAuthor(
+                                              author: state.postDetails!.author,
+                                            ),
+                                            const SizedBox(height: 10),
+                                            PostContent(
+                                              content:
+                                                  state.postDetails!.content,
+                                              image: state.postDetails!.image,
+                                              linkImages:
+                                                  state.postDetails!.linkImages,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      _buildComments(
+                                        state.postDetails?.comments ?? [],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            case PostDetailsStatus.error:
+                              return const Center(
+                                child: Text('Oups, une erreur est survenue.'),
+                              );
+                          }
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           );
         },
