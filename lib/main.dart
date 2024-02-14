@@ -213,9 +213,35 @@ ThemeData _getTheme() {
     useMaterial3: true,
     primaryColor: const Color(0xff131D35),
     cardColor: const Color(0xff1E2A47),
+    cardTheme: const CardTheme(
+      color: Color(0xff1E2A47),
+    ),
     scaffoldBackgroundColor: const Color(0xff131D35),
+    inputDecorationTheme: const InputDecorationTheme(
+      suffixIconColor: Colors.white,
+      labelStyle: TextStyle(
+        color: Colors.white,
+      ),
+      hintStyle: TextStyle(
+        color: Colors.grey,
+      ),
+      helperStyle: TextStyle(
+        color: Colors.grey,
+      ),
+      errorStyle: TextStyle(
+        color: Colors.redAccent,
+      ),
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xff131D35),
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
       elevation: 1,
     ),
     dialogTheme: const DialogTheme(

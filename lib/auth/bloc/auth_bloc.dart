@@ -12,7 +12,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required this.authRepository,
     Function? noAuthCallback,
-  }) : super(AuthState(noAuthCallback: noAuthCallback)) {
+  }) : super(AuthState(
+          noAuthCallback: noAuthCallback,
+          status: AuthStatus.initial,
+        )) {
     on<SignUp>(_onSigningUp);
     on<Login>(_onLogin);
     on<GetUser>(_onGetUser);
@@ -37,37 +40,61 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onSigningUp(SignUp event, Emitter<AuthState> emit) async {
-    try {
-      final auth = await authRepository.signUp(
-        event.name,
-        event.email,
-        event.password,
-      );
+    if (state.status != AuthStatus.loading) {
       emit(
         state.copyWith(
-          user: auth.user,
-          token: auth.token,
+          status: AuthStatus.loading,
         ),
       );
-    } catch (error) {
-      rethrow;
+      try {
+        final auth = await authRepository.signUp(
+          event.name,
+          event.email,
+          event.password,
+        );
+        emit(
+          state.copyWith(
+            user: auth.user,
+            token: auth.token,
+            status: AuthStatus.success,
+          ),
+        );
+      } catch (error) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+          ),
+        );
+      }
     }
   }
 
   void _onLogin(Login event, Emitter<AuthState> emit) async {
-    try {
-      final auth = await authRepository.login(
-        event.email,
-        event.password,
-      );
-      emit(
-        state.copyWith(
-          user: auth.user,
-          token: auth.token,
-        ),
-      );
-    } catch (error) {
-      rethrow;
+    if (state.status != AuthStatus.loading) {
+      try {
+        emit(
+          state.copyWith(
+            status: AuthStatus.loading,
+          ),
+        );
+        final auth = await authRepository.login(
+          event.email,
+          event.password,
+        );
+        emit(
+          state.copyWith(
+            user: auth.user,
+            token: auth.token,
+            status: AuthStatus.success,
+          ),
+        );
+      } catch (error) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+          ),
+        );
+      }
     }
   }
 
