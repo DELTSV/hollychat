@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/auth/screens/sign_in_screen.dart';
 import 'package:hollychat/auth/widgets/register_form.dart';
 import 'package:hollychat/posts/screens/posts_screen.dart';
 
@@ -8,6 +9,8 @@ import '../bloc/auth_bloc.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
+
+  static const routeName = '/sign-up';
 
   void _onRegister(
       BuildContext context, String email, String username, String password) {
@@ -38,10 +41,7 @@ class SignUpScreen extends StatelessWidget {
                 isLoading: state.status == AuthStatus.loading,
               ),
             ),
-            body: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 500,
-              ),
+            body: SingleChildScrollView(
               child: Expanded(
                 child: Center(
                   child: Padding(
@@ -49,19 +49,36 @@ class SignUpScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        const SizedBox(height: 30),
                         const Image(
                           image: AssetImage('assets/images/logo.png'),
                           height: 35,
                         ),
-                        // const Spacer(),
-                        RegisterForm(
-                          onSubmit: (email, username, password) => _onRegister(
-                            context,
-                            email,
-                            username,
-                            password,
-                          ),
-                          isLoading: state.status == AuthStatus.loading,
+                        const SizedBox(height: 20),
+                        Column(
+                          children: [
+                            RegisterForm(
+                              onSubmit: (email, username, password) => _onRegister(
+                                context,
+                                email,
+                                username,
+                                password,
+                              ),
+                              isLoading: state.status == AuthStatus.loading,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text("Déjà inscrit ?"),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, SignInScreen.routeName);
+                                  },
+                                  child: const Text('Se connecter'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),

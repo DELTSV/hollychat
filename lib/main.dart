@@ -16,11 +16,11 @@ import 'package:hollychat/posts/screens/image_screen.dart';
 import 'package:hollychat/posts/screens/post_details_screen.dart';
 import 'package:hollychat/posts/screens/posts_screen.dart';
 import 'package:hollychat/posts/services/comments/comments_api_data_source.dart';
-import 'package:hollychat/posts/services/comments/comments_data_source.dart';
 import 'package:hollychat/posts/services/comments/comments_repository.dart';
 import 'package:hollychat/posts/services/posts/posts_api_data_source.dart';
 import 'package:hollychat/posts/services/posts/posts_repository.dart';
 
+import 'auth/screens/sign_up_screen.dart';
 import 'models/minimal_post.dart';
 import 'models/post_image.dart';
 
@@ -102,7 +102,8 @@ class HollyChatApp extends StatelessWidget {
           onGenerateRoute: _getRoute,
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
-            '/login': (context) => const SignInScreen(),
+            SignInScreen.routeName: (context) => const SignInScreen(),
+            SignUpScreen.routeName: (context) => const SignUpScreen(),
           },
           navigatorKey: navigatorKey,
         ),

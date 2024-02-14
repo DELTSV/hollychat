@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hollychat/auth/screens/sign_in_screen.dart';
 import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/screens/add_post_screen.dart';
 import 'package:hollychat/posts/screens/post_details_screen.dart';
@@ -99,7 +100,7 @@ class _PostsScreenState extends State<PostsScreen> {
           horizontal: 16,
         ),
       ),
-      onPressed: () => Navigator.pushNamed(context, '/login'),
+      onPressed: () => Navigator.pushNamed(context, SignInScreen.routeName),
       child: const Text("Connexion"),
     );
   }
