@@ -62,7 +62,7 @@ class _PostLinkPreviewState extends State<PostLinkPreview> {
               PostLinkPreviewImage(imageUrl: widget.linkPreview.image),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0, 32.0, 0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 8, 32.0, 8),
                   child: Text(widget.linkPreview.title, overflow: TextOverflow.ellipsis, maxLines: 2, style: const TextStyle(color: Colors.grey),),
                 ),
               ),
