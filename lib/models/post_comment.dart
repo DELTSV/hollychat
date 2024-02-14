@@ -24,8 +24,8 @@ class PostComment {
 
   factory PostComment.fromJson(Map<String, dynamic> json) {
     String text = json['content'];
-    RegExp expImg = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]+\.(?:png|jpg|jpeg|gif|webp))', multiLine: true);
-    RegExp exp = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]*)', multiLine: true);
+    RegExp expImg = RegExp(r'(https?://?[\w/\-?=%.&]+\.[\w/\-?=%.&]+\.(?:png|jpg|jpeg|gif|webp))', multiLine: true);
+    RegExp exp = RegExp(r'(https?://?[\w/\-?=%.&]+\.[\w/\-?=%.&]*)', multiLine: true);
     var matches = exp.allMatches(text);
 
     var index = 0;

@@ -41,15 +41,42 @@ class PostCommentPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(comment.content.isEmpty && comment.imagesLinks.isNotEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          ...comment.imagesLinks.map((img) =>
-              ImageViewer(
-                postImage: img,
-              )),
-        ],
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PostAuthor(author: comment.author),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    if (_isAuthor(state.user, comment)) {
+                      return SettingsMenu(
+                        onItemSelected: (itemType) =>
+                            _onItemSelected(itemType, context),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                ...comment.imagesLinks.map((img) =>
+                    ImageViewer(
+                      postImage: img,
+                    )),
+              ],
+            )
+          ],
+        ),
       );
     }
 
