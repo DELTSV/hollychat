@@ -5,8 +5,8 @@ import 'package:hollychat/auth/widgets/password_field.dart';
 
 import 'email_field.dart';
 
-class AuthForm extends StatefulWidget {
-  const AuthForm({
+class LoginForm extends StatefulWidget {
+  const LoginForm({
     super.key,
     required this.onSubmit,
     required this.isLoading,
@@ -16,10 +16,10 @@ class AuthForm extends StatefulWidget {
   final void Function(String email, String password) onSubmit;
 
   @override
-  State<AuthForm> createState() => _AuthFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   String? _errorText;
 
@@ -71,11 +71,11 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               children: [
                 EmailField(
-                  emailController: _emailController,
+                  controller: _emailController,
                   errorText: _errorText,
                 ),
                 PasswordField(
-                  passwordController: _passwordController,
+                  controller: _passwordController,
                   errorText: _errorText,
                 ),
                 const SizedBox(

@@ -4,12 +4,13 @@ class PasswordField extends StatefulWidget {
   const PasswordField({
     super.key,
     this.errorText,
-    required this.passwordController,
+    required this.controller,
+    this.checkLength = false,
   });
 
   final String? errorText;
-  final bool checkLength = false;
-  final TextEditingController passwordController;
+  final bool checkLength;
+  final TextEditingController controller;
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -55,7 +56,7 @@ class _PasswordFieldState extends State<PasswordField> {
         return null;
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      controller: widget.passwordController,
+      controller: widget.controller,
       obscureText: !_passwordVisible,
     );
   }

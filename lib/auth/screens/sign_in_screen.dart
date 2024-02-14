@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hollychat/auth/widgets/auth_form.dart';
+import 'package:hollychat/auth/widgets/login_form.dart';
 import 'package:hollychat/posts/screens/posts_screen.dart';
 
 import '../../posts/widgets/linear_progress_bar.dart';
@@ -52,9 +52,13 @@ class SignInScreen extends StatelessWidget {
                           height: 35,
                         ),
                         // const Spacer(),
-                        AuthForm(
-                          onSubmit: (email, password) =>
-                              _onLogin(context, email, password), isLoading: state.status == AuthStatus.loading,
+                        LoginForm(
+                          onSubmit: (email, password) => _onLogin(
+                            context,
+                            email,
+                            password,
+                          ),
+                          isLoading: state.status == AuthStatus.loading,
                         ),
                       ],
                     ),
