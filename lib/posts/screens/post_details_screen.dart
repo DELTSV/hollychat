@@ -89,8 +89,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   }
 
   void _onDeleteComment(BuildContext context, int commentId) {
-    // final deletePostBloc = BlocProvider.of<DeletePostBloc>(context);
-    // deletePostBloc.add(DeletePost(id: widget.post.id));
+    final deleteCommentBloc = BlocProvider.of<CommentBloc>(context);
+    deleteCommentBloc.add(DeleteComment(id: commentId));
   }
 
   void _onEditComment(BuildContext context, int commentId, String content) {
@@ -159,6 +159,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         ),
         BlocListener<CommentBloc, CommentState>(
           listener: (context, state) {
+            print("state $state");
             if (state.status == CommentStatus.success) {
               _onCommentAdded(context);
             }

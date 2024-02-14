@@ -11,4 +11,12 @@ class CommentsRepository {
   Future<void> createComment(int postId, String content) async {
     return commentsDataSource.createComment(postId, content);
   }
+
+  Future<void> updateComment(int commentId, String content) async {
+    return commentsDataSource.updateComment(commentId, content);
+  }
+
+  Future<void> deleteComment(int commentId) async {
+    return commentsDataSource.deleteComment(commentId);
+  }
 }

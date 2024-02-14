@@ -38,4 +38,39 @@ class CommentsApiDataSource extends CommentsDataSource {
       'Authorization': 'Bearer $token',
     };
   }
+
+  @override
+  Future<void> deleteComment(int commentId) async {
+    print("deleting comment from server...");
+    try {
+      await dio.delete(
+        '/$commentId',
+        options: Options(headers: {
+          ...await _getAuthorizationHeader(),
+        }),
+      );
+    } catch (error) {
+      print("error deleting comment from server: $error");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateComment(int commentId, String content) async {
+    print("updating comment on server...");
+    try {
+      await dio.put(
+        '/$commentId',
+        data: {
+          'content': content,
+        },
+        options: Options(headers: {
+          ...await _getAuthorizationHeader(),
+        }),
+      );
+    } catch (error) {
+      print("error updating comment on server: $error");
+      rethrow;
+    }
+  }
 }

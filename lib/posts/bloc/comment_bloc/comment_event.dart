@@ -12,3 +12,21 @@ class AddComment extends CommentEvent {
     required this.content,
   });
 }
+
+class UpdateComment extends CommentEvent {
+  final int id;
+  final String content;
+
+  UpdateComment({
+    required this.id,
+    required this.content,
+  });
+}
+
+class DeleteComment extends CommentEvent {
+  final int id;
+
+  DeleteComment({
+    required this.id,
+  });
+}
