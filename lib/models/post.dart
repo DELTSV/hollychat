@@ -20,6 +20,7 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     String text = json['content'];
+    RegExp expImg = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]+\.(?:png|jpg|jpeg|gif|webp))', multiLine: true);
     RegExp exp = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]+)', multiLine: true);
     var matches = exp.allMatches(text);
 
@@ -36,7 +37,9 @@ class Post {
           contents.add(text.substring(index, start));
         }
         index = start + matches.first.group(i)!.length;
-        images.add(PostImage(url: matches.first.group(i)!, height: 10, width: 10));
+        if(expImg.hasMatch(matches.first.group(i)!)) {
+          images.add(PostImage(url: matches.first.group(i)!, height: 10, width: 10));
+        }
         contents.add(matches.first.group(i)!);
       }
 
