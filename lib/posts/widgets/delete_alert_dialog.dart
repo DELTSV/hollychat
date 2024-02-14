@@ -13,9 +13,9 @@ class DeleteAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Supprimer le post"),
+      title: const Text("Suppression"),
       content: const Text(
-          "Êtes-vous sûr de vouloir supprimer ce post ? Cette action est irréversible."),
+          "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."),
       actions: [
         TextButton(
           onPressed: onCancel,

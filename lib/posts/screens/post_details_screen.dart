@@ -7,13 +7,14 @@ import 'package:hollychat/posts/widgets/post_comment_list.dart';
 import 'package:hollychat/posts/widgets/post_separator.dart';
 
 import '../../models/minimal_post.dart';
+import '../../models/post_comment.dart';
 import '../bloc/delete_post_bloc/delete_post_bloc.dart';
 import '../bloc/post_details_bloc/post_details_bloc.dart';
 import '../widgets/delete_alert_dialog.dart';
 import '../widgets/post_author.dart';
 import '../widgets/post_comment_field.dart';
 import '../widgets/post_content.dart';
-import '../widgets/post_settings_menu.dart';
+import '../widgets/settings_menu.dart';
 import 'edit_post_screen.dart';
 
 class PostDetailsScreen extends StatefulWidget {
@@ -87,6 +88,57 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     );
   }
 
+  void _onDeleteComment(BuildContext context, int commentId) {
+    // final deletePostBloc = BlocProvider.of<DeletePostBloc>(context);
+    // deletePostBloc.add(DeletePost(id: widget.post.id));
+  }
+
+  void _onEditComment(BuildContext context, int commentId, String content) {
+    // Navigator.popUntil(
+    //   context,
+    //   ModalRoute.withName('/'),
+    // );
+  }
+
+  Widget _buildComments(List<PostComment> comments) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const PostSeparator(padding: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+          ),
+          child: Text(
+            'Commentaires',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
+        const SizedBox(height: 20),
+        PostCommentList(
+          onDelete: (commentId) => _onDeleteComment(context, commentId),
+          onEdit: (commentId, content) =>
+              _onEditComment(context, commentId, content),
+          comments: comments,
+        ),
+      ],
+    );
+  }
+
+  Widget? _buildFloatingButton(bool isAuthenticated) {
+    if (!isAuthenticated) {
+      return null;
+    }
+
+    return PostCommentField(
+      onSubmitted: (String text) => onSubmittedComment(
+        widget.post.id,
+        text,
+      ),
+      authorName: widget.post.author.username,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -120,7 +172,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           if (state.isAuthenticated) {
             if (state.user!.id == widget.post.author.id) {
               actions.add(
-                PostSettingsMenu(
+                SettingsMenu(
                   onItemSelected: (itemType) =>
                       _onItemSelected(itemType, context),
                 ),
@@ -131,15 +183,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           return SafeArea(
             top: false,
             child: Scaffold(
-              bottomSheet: state.isAuthenticated
-                  ? PostCommentField(
-                      onSubmitted: (String text) => onSubmittedComment(
-                        widget.post.id,
-                        text,
-                      ),
-                      authorName: widget.post.author.username,
-                    )
-                  : null,
+              bottomSheet: _buildFloatingButton(state.isAuthenticated),
               appBar: AppBar(
                 iconTheme: const IconThemeData(color: Colors.white),
                 title: Text(
@@ -190,30 +234,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   ],
                                 ),
                               ),
-                              Builder(builder: (context) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const PostSeparator(padding: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 15,
-                                      ),
-                                      child: Text(
-                                        'Commentaires',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    PostCommentList(
-                                      comments:
-                                          state.postDetails?.comments ?? [],
-                                    ),
-                                  ],
-                                );
-                              }),
+                              _buildComments(
+                                state.postDetails?.comments ?? [],
+                              ),
                             ],
                           ),
                         ),

@@ -6,7 +6,7 @@ import 'package:hollychat/posts/bloc/delete_post_bloc/delete_post_bloc.dart';
 import 'package:hollychat/posts/widgets/delete_alert_dialog.dart';
 import 'package:hollychat/posts/widgets/post_author.dart';
 import 'package:hollychat/posts/widgets/post_content.dart';
-import 'package:hollychat/posts/widgets/post_settings_menu.dart';
+import 'package:hollychat/posts/widgets/settings_menu.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 import '../../models/user.dart';
@@ -73,7 +73,7 @@ class PostPreview extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           PostAuthor(author: post.author),
-          PostSettingsMenu(
+          SettingsMenu(
             onItemSelected: (itemType) => _onItemSelected(itemType, context),
           ),
         ],

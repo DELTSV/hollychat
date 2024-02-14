@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PostSettingsItem {
-  const PostSettingsItem({
+class SettingsItem {
+  const SettingsItem({
     required this.type,
     required this.content,
   });
@@ -15,8 +15,8 @@ enum MenuItemType {
   delete,
 }
 
-class PostSettingsMenu extends StatelessWidget {
-  const PostSettingsMenu({
+class SettingsMenu extends StatelessWidget {
+  const SettingsMenu({
     super.key,
     required this.onItemSelected,
   });
@@ -24,8 +24,8 @@ class PostSettingsMenu extends StatelessWidget {
   final void Function(MenuItemType value) onItemSelected;
 
   List<PopupMenuItem<MenuItemType>> _buildItems() {
-    const List<PostSettingsItem> items = [
-      PostSettingsItem(
+    const List<SettingsItem> items = [
+      SettingsItem(
         type: MenuItemType.edit,
         content: Row(
           children: [
@@ -35,7 +35,7 @@ class PostSettingsMenu extends StatelessWidget {
           ],
         ),
       ),
-      PostSettingsItem(
+      SettingsItem(
         type: MenuItemType.delete,
         content: Row(
           children: [
@@ -49,7 +49,7 @@ class PostSettingsMenu extends StatelessWidget {
 
     return items
         .map(
-          (PostSettingsItem item) => PopupMenuItem<MenuItemType>(
+          (SettingsItem item) => PopupMenuItem<MenuItemType>(
             value: item.type,
             child: item.content,
           ),

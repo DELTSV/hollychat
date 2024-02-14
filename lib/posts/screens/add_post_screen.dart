@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/widgets/post_form.dart';
 
 import '../bloc/post_bloc/post_bloc.dart';
+import '../widgets/linear_progress_bar.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -54,28 +55,31 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.close),
-        ),
-        actions: [getSendButton()],
-        title: Text(
-          'Nouveau post',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
-      body: BlocListener<PostBloc, PostState>(
-        listener: (context, state) {
-          if (state.status == PostStatus.success) {
-            Navigator.of(context).pop();
-          }
-        },
-        child: BlocBuilder<PostBloc, PostState>(
-          builder: (context, state) {
-            return SafeArea(
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: const IconThemeData(color: Colors.white),
+            leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.close),
+            ),
+            bottom: LinearProgressBar(
+              isLoading: state.status == PostStatus.loading,
+            ),
+            actions: [getSendButton()],
+            title: Text(
+              'Nouveau post',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          body: BlocListener<PostBloc, PostState>(
+            listener: (context, state) {
+              if (state.status == PostStatus.success) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15.0),
                 child: PostForm(
@@ -93,10 +97,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   },
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
