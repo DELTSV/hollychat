@@ -27,7 +27,6 @@ class _PostLinkPreviewState extends State<PostLinkPreview> {
     }
 
     return SizedBox(
-      height: 138,
       child: Stack(
         children: [
           GestureDetector(
@@ -56,6 +55,7 @@ class _PostLinkPreviewState extends State<PostLinkPreview> {
 
   Widget _buildPreview(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       color: Theme.of(context).cardColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -74,7 +74,7 @@ class _PostLinkPreviewState extends State<PostLinkPreview> {
           ),
           const Divider(height: 0),
           Padding(
-            padding: const EdgeInsets.only(left: 8, top: 2, right: 8),
+            padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

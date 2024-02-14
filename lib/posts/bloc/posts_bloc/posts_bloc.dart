@@ -48,6 +48,10 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       final List<MinimalPost> newPosts = await postsRepository
           .getAllPostsWithPagination(1, numberOfPostsPerRequest);
 
+      for(var post in newPosts) {
+        post.linksPreviews = await post.getPreviews();
+      }
+
       emit(state.copyWith(
         posts: newPosts,
         hasMore: newPosts.length == numberOfPostsPerRequest,
