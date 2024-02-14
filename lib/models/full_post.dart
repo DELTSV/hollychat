@@ -12,6 +12,7 @@ class FullPost extends Post {
     super.image,
     required super.linkImages,
     required super.links,
+    required super.linksPreviews,
     required this.comments,
   });
 
@@ -26,6 +27,7 @@ class FullPost extends Post {
       image: post.image,
       linkImages: post.linkImages,
       links: post.links,
+      linksPreviews: post.linksPreviews,
       comments: (json['comments'] as List)
           .map((comment) => PostComment.fromJson(comment))
           .toList(),

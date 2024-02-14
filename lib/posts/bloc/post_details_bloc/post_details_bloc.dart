@@ -5,6 +5,7 @@ import 'package:hollychat/models/full_post.dart';
 import '../../services/posts/posts_repository.dart';
 
 part 'post_details_event.dart';
+
 part 'post_details_state.dart';
 
 class PostDetailsBloc extends Bloc<PostDetailsEvent, PostDetailsState> {
@@ -14,14 +15,20 @@ class PostDetailsBloc extends Bloc<PostDetailsEvent, PostDetailsState> {
     on<LoadPostDetailsById>(_onLoadPosts);
   }
 
-  void _onLoadPosts(
-      LoadPostDetailsById event, Emitter<PostDetailsState> emit) async {
+  void _onLoadPosts(LoadPostDetailsById event,
+      Emitter<PostDetailsState> emit) async {
     if (state.status != PostDetailsStatus.loading) {
       emit(state.copyWith(status: PostDetailsStatus.loading));
 
       try {
         final FullPost postDetails =
-            await postsRepository.getPostDetailsById(event.postId);
+        await postsRepository.getPostDetailsById(event.postId);
+
+        postDetails.linksPreviews = await postDetails.getPreviews();
+
+        for (var comment in postDetails.comments) {
+          comment.linksPreviews = await comment.getPreviews();
+        }
 
         emit(state.copyWith(
           postDetails: postDetails,

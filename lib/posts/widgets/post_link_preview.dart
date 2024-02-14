@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:hollychat/models/link_preview.dart';
 import 'package:hollychat/posts/widgets/post_link_preview_image.dart';
 import 'package:html/dom.dart' as html;
 import 'package:html/parser.dart';
@@ -7,9 +8,9 @@ import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostLinkPreview extends StatefulWidget {
-  const PostLinkPreview({super.key, required this.url});
+  const PostLinkPreview({super.key, required this.linkPreview});
 
-  final String url;
+  final LinkPreview linkPreview;
 
   @override
   State<PostLinkPreview> createState() => _PostLinkPreviewState();
@@ -18,66 +19,19 @@ class PostLinkPreview extends StatefulWidget {
 class _PostLinkPreviewState extends State<PostLinkPreview> {
 
   bool _isVisible = true;
-  Map? _linkPreviewData;
-
-  @override
-  void initState() {
-    super.initState();
-    _getLinkData();
-  }
-
-  @override
-  void didUpdateWidget(covariant PostLinkPreview oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _getLinkData();
-  }
-
-  void _getLinkData() async {
-    if(!mounted) {
-      return;
-    }
-
-    var response = await get(Uri.parse(widget.url));
-    if(response.statusCode != 200) {
-      setState(() {
-        _linkPreviewData = null;
-      });
-    }
-
-    var doc = parse(response.body);
-    Map linkData = {};
-    _getOG(doc, linkData, 'og:title');
-    _getOG(doc, linkData, 'og:description');
-    _getOG(doc, linkData, 'og:site_name');
-    _getOG(doc, linkData, 'og:image');
-
-    if(linkData.isNotEmpty) {
-      setState(() {
-        _linkPreviewData = linkData;
-        _isVisible = true;
-      });
-    }
-  }
-
-  void _getOG(html.Document doc, Map data, String param) {
-    var metaTag = doc.getElementsByTagName("meta").firstWhereOrNull((meta) => meta.attributes['property'] == param);
-    if(metaTag != null) {
-      data[param] = metaTag.attributes['content'];
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    if(_linkPreviewData == null || !_isVisible) {
+    if(!_isVisible) {
       return const SizedBox();
     }
 
     return SizedBox(
-      height: 130,
+      height: 138,
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () => launchUrl(Uri.parse(widget.url)),
+            onTap: () => launchUrl(Uri.parse(widget.linkPreview.url)),
             child: _buildPreview(context),
           ),
           _buildCloseButton()
@@ -109,23 +63,23 @@ class _PostLinkPreviewState extends State<PostLinkPreview> {
         children: [
           Row(
             children: [
-              PostLinkPreviewImage(imageUrl: _linkPreviewData!["og:image"]),
+              PostLinkPreviewImage(imageUrl: widget.linkPreview.image),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 0, 32.0, 0),
-                  child: Text(_linkPreviewData!['og:title'], overflow: TextOverflow.ellipsis, maxLines: 3, style: const TextStyle(color: Colors.grey),),
+                  child: Text(widget.linkPreview.title, overflow: TextOverflow.ellipsis, maxLines: 2, style: const TextStyle(color: Colors.grey),),
                 ),
               ),
             ],
           ),
           const Divider(height: 0),
           Padding(
-            padding: const EdgeInsets.only(left: 4, top: 2),
+            padding: const EdgeInsets.only(left: 8, top: 2, right: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_linkPreviewData!["og:site_name"], style: const TextStyle(fontSize: 20, color: Colors.white70),),
-                Text(_linkPreviewData!["og:description"], style: const TextStyle(color: Colors.grey),),
+                Text(widget.linkPreview.siteName, style: const TextStyle(fontSize: 20, color: Colors.white70), overflow: TextOverflow.ellipsis,),
+                Text(widget.linkPreview.description, style: const TextStyle(color: Colors.grey), maxLines: 2, overflow: TextOverflow.ellipsis,),
               ]
             ),
           ),

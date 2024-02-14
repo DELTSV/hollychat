@@ -51,10 +51,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   }
 
   void _onPostDeleted(BuildContext context) {
-    Navigator.popUntil(
-      context,
-      ModalRoute.withName('/'),
-    );
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   void _onCommentAdded(BuildContext context) {
@@ -251,6 +248,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                               linkImages:
                                                   state.postDetails!.linkImages,
                                               links: state.postDetails!.links,
+                                              linksPreviews: state.postDetails!.linksPreviews,
                                             ),
                                           ],
                                         ),

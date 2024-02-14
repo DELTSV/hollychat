@@ -1,5 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:hollychat/models/author.dart';
+import 'package:hollychat/models/link_preview.dart';
 import 'package:hollychat/models/post_image.dart';
+import 'package:html/dom.dart';
+import 'package:html/parser.dart';
+import 'package:http/http.dart';
 
 class Post {
   final int id;
@@ -9,21 +14,23 @@ class Post {
   final Author author;
   final List<PostImage> linkImages;
   final List<String> links;
+  List<LinkPreview> linksPreviews;
 
-  const Post({
+  Post({
     required this.id,
     required this.content,
     required this.originalText,
     required this.author,
     this.image,
     required this.linkImages,
-    required this.links
+    required this.links,
+    required this.linksPreviews
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     String text = json['content'];
     RegExp expImg = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]+\.(?:png|jpg|jpeg|gif|webp))', multiLine: true);
-    RegExp exp = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]+)', multiLine: true);
+    RegExp exp = RegExp(r'(https?://?[\w/\-?=%.]+\.[\w/\-?=%.]*)', multiLine: true);
     var matches = exp.allMatches(text);
 
     var index = 0;
@@ -65,6 +72,48 @@ class Post {
       image: json['image'] == null ? null : PostImage.fromJson(json['image']),
       linkImages: images,
       links: links,
+      linksPreviews: []
     );
+  }
+
+  Future<List<LinkPreview>> getPreviews() async {
+    var a = links.map((url) =>
+        getPreview(url)
+    );
+    return (await Future.wait(a)).whereType<LinkPreview>().toList();
+  }
+
+  Future<LinkPreview?> getPreview(String url) async {
+    var response = await get(Uri.parse(url));
+    if (response.statusCode != 200) {
+      return null;
+    }
+
+    var doc = parse(response.body);
+    Map linkData = {};
+    _getOG(doc, linkData, 'og:title');
+    _getOG(doc, linkData, 'og:description');
+    _getOG(doc, linkData, 'og:site_name');
+    _getOG(doc, linkData, 'og:image');
+
+    if (linkData.isNotEmpty && linkData.containsKey("og:title") &&
+        linkData.containsKey("og:site_name") &&
+        linkData.containsKey("og:description")) {
+      return LinkPreview(url: url,
+        title: linkData['og:title'],
+        description: linkData['og:description'],
+        image: linkData['og:image'],
+        siteName: linkData['og:site_name'],);
+    } else {
+      return null;
+    }
+  }
+
+  void _getOG(Document doc, Map data, String param) {
+    var metaTag = doc.getElementsByTagName("meta").firstWhereOrNull((
+        meta) => meta.attributes['property'] == param);
+    if (metaTag != null) {
+      data[param] = metaTag.attributes['content'];
+    }
   }
 }

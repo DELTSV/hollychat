@@ -104,7 +104,13 @@ class PostPreview extends StatelessWidget {
                 _compareUserAuthor(state.user, post.author),
               ),
               const SizedBox(height: 10),
-              PostContent(content: post.content, image: post.image, linkImages: post.linkImages, links: post.links),
+              PostContent(
+                content: post.content,
+                image: post.image,
+                linkImages: post.linkImages,
+                links: post.links,
+                linksPreviews: post.linksPreviews,
+              ),
             ],
           );
         }),

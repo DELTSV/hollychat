@@ -11,6 +11,7 @@ class MinimalPost extends Post {
     required super.image,
     required super.linkImages,
     required super.links,
+    required super.linksPreviews,
     required this.commentsCount,
   });
 
@@ -25,6 +26,7 @@ class MinimalPost extends Post {
       image: post.image,
       linkImages: post.linkImages,
       links: post.links,
+      linksPreviews: post.linksPreviews,
       commentsCount: json['comments_count'],
     );
   }
