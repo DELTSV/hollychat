@@ -100,10 +100,10 @@ Voici les différentes features évaluées et les critères d’évaluation asso
 ### Inscription Connexion (5 points)
 
 - Rendu (2 points)
-    - Affichage formulaires
-    - Bonne gestion de navigation associée
+    - ~~Affichage formulaires~~
+    - ~~Bonne gestion de navigation associée~~
 - Architecture (3 points)
-    - Gestion d’état + séparation UI/logique
+    - ~~Gestion d’état + séparation UI/logique~~
     - Tests d’intégrations
 ### Liste des posts (5 points)
 
@@ -122,8 +122,8 @@ Voici les différentes features évaluées et les critères d’évaluation asso
 - Rendu (2 points)
     - ~~Affichage du détail au clique sur un post~~
     - ~~Appel réseau spécifique pour avoir le détail d’un post à partir d’un ID~~
-    - Possibilité de le modifier / supprimer si j’en suis l’auteur
-    - Possibilité d’ajouter un post
+    - ~~Possibilité de le modifier / supprimer si j’en suis l’auteur~~
+    - ~~Possibilité d’ajouter un post~~
     - ~~Affichage des commentaires liés au post~~
 - Architecture (3 points)
     - ~~Gestion d’état + séparation UI/logique~~
@@ -133,8 +133,8 @@ Voici les différentes features évaluées et les critères d’évaluation asso
 
 - Rendu (2 points)
     - ~~Affichage des commentaires d’un post~~
-    - Possibilité de le modifier / supprimer si j’en suis l’auteur
-    - Possibilité d’ajouter un commentaire
+    - ~~Possibilité de le modifier / supprimer si j’en suis l’auteur~~
+    - ~~Possibilité d’ajouter un commentaire~~
 - Architecture (3 points)
     - ~~Gestion d’état + séparation UI/logique~~
     - Tests d’intégrations
