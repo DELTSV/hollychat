@@ -8,6 +8,7 @@ class Post {
   final PostImage? image;
   final Author author;
   final List<PostImage> linkImages;
+  final List<String> links;
 
   const Post({
     required this.id,
@@ -16,6 +17,7 @@ class Post {
     required this.author,
     this.image,
     required this.linkImages,
+    required this.links
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class Post {
     var index = 0;
     List<String> contents = [];
     List<PostImage> images = [];
+    List<String> links = [];
 
     if (matches.isEmpty) {
       contents.add(text);
@@ -39,6 +42,8 @@ class Post {
         index = start + matches.first.group(i)!.length;
         if(expImg.hasMatch(matches.first.group(i)!)) {
           images.add(PostImage(url: matches.first.group(i)!, height: 10, width: 10));
+        } else {
+          links.add(matches.first.group(i)!);
         }
         contents.add(matches.first.group(i)!);
       }
@@ -58,7 +63,8 @@ class Post {
       originalText: text,
       author: Author.fromJson(json['author']),
       image: json['image'] == null ? null : PostImage.fromJson(json['image']),
-      linkImages: images
+      linkImages: images,
+      links: links,
     );
   }
 }

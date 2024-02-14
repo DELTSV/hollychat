@@ -46,6 +46,8 @@ dependencies:
   shared_preferences: ^2.2.2
   path_provider: ^2.1.2
   url_launcher:
+  html:
+  collection:
 
 dev_dependencies:
   flutter_test:

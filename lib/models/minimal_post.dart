@@ -10,6 +10,7 @@ class MinimalPost extends Post {
     required super.author,
     required super.image,
     required super.linkImages,
+    required super.links,
     required this.commentsCount,
   });
 
@@ -23,6 +24,7 @@ class MinimalPost extends Post {
       author: post.author,
       image: post.image,
       linkImages: post.linkImages,
+      links: post.links,
       commentsCount: json['comments_count'],
     );
   }
