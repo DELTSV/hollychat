@@ -12,7 +12,6 @@ class CommentsApiDataSource extends CommentsDataSource {
 
   @override
   Future<void> createComment(int postId, String content) async {
-    print("sending comment to server...");
     try {
       await dio.post(
         '',
@@ -25,7 +24,6 @@ class CommentsApiDataSource extends CommentsDataSource {
         }),
       );
     } catch (error) {
-      print("error sending comment to server: $error");
       rethrow;
     }
   }
@@ -41,7 +39,6 @@ class CommentsApiDataSource extends CommentsDataSource {
 
   @override
   Future<void> deleteComment(int commentId) async {
-    print("deleting comment from server...");
     try {
       await dio.delete(
         '/$commentId',
@@ -50,14 +47,12 @@ class CommentsApiDataSource extends CommentsDataSource {
         }),
       );
     } catch (error) {
-      print("error deleting comment from server: $error");
       rethrow;
     }
   }
 
   @override
   Future<void> updateComment(int commentId, String content) async {
-    print("updating comment on server...");
     try {
       await dio.put(
         '/$commentId',
@@ -69,7 +64,6 @@ class CommentsApiDataSource extends CommentsDataSource {
         }),
       );
     } catch (error) {
-      print("error updating comment on server: $error");
       rethrow;
     }
   }
