@@ -72,7 +72,7 @@ class _PostLinkPreviewState extends State<PostLinkPreview> {
       return const SizedBox();
     }
 
-    return Container(
+    return SizedBox(
       height: 130,
       child: Stack(
         children: [
