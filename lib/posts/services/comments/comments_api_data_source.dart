@@ -54,7 +54,7 @@ class CommentsApiDataSource extends CommentsDataSource {
   @override
   Future<void> updateComment(int commentId, String content) async {
     try {
-      await dio.put(
+      await dio.patch(
         '/$commentId',
         data: {
           'content': content,

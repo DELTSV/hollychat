@@ -110,15 +110,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   }
 
   void _onDeleteComment(BuildContext context, int commentId) {
-    final deleteCommentBloc = BlocProvider.of<CommentBloc>(context);
-    deleteCommentBloc.add(DeleteComment(id: commentId));
+    final commentBloc = BlocProvider.of<CommentBloc>(context);
+    commentBloc.add(DeleteComment(id: commentId));
   }
 
   void _onEditComment(BuildContext context, int commentId, String content) {
-    // Navigator.popUntil(
-    //   context,
-    //   ModalRoute.withName('/'),
-    // );
+    final commentBloc = BlocProvider.of<CommentBloc>(context);
+    commentBloc.add(UpdateComment(id: commentId, content: content));
   }
 
   Widget _buildComments(List<PostComment> comments) {
@@ -180,7 +178,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         ),
         BlocListener<CommentBloc, CommentState>(
           listener: (context, state) {
-            print("state $state");
             if (state.status == CommentStatus.success) {
               _onCommentAdded(context);
             }

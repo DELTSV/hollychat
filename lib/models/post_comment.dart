@@ -6,6 +6,7 @@ import 'link_preview.dart';
 class PostComment {
   final int id;
   final List<String> content;
+  final DateTime createdAt;
   final String originalString;
   final List<PostImage> imagesLinks;
   final List<String> links;
@@ -14,6 +15,7 @@ class PostComment {
 
   PostComment({
     required this.id,
+    required this.createdAt,
     required this.content,
     required this.originalString,
     required this.imagesLinks,
@@ -24,8 +26,14 @@ class PostComment {
 
   factory PostComment.fromJson(Map<String, dynamic> json) {
     String text = json['content'];
-    RegExp expImg = RegExp(r'(https?://?[\w/\-?=%.&]+\.[\w/\-?=%.&]+\.(?:png|jpg|jpeg|gif|webp))', multiLine: true);
-    RegExp exp = RegExp(r'(https?://?[\w/\-?=%.&]+\.[\w/\-?=%.&]*)', multiLine: true);
+    RegExp expImg = RegExp(
+      r'(https?://?[\w/\-?=%.&]+\.[\w/\-?=%.&]+\.(?:png|jpg|jpeg|gif|webp))',
+      multiLine: true,
+    );
+    RegExp exp = RegExp(
+      r'(https?://?[\w/\-?=%.&]+\.[\w/\-?=%.&]*)',
+      multiLine: true,
+    );
     var matches = exp.allMatches(text);
 
     var index = 0;
@@ -42,8 +50,9 @@ class PostComment {
           contents.add(text.substring(index, start));
         }
         index = start + matches.first.group(i)!.length;
-        if(expImg.hasMatch(matches.first.group(i)!)) {
-          images.add(PostImage(url: matches.first.group(i)!, height: 10, width: 10));
+        if (expImg.hasMatch(matches.first.group(i)!)) {
+          images.add(
+              PostImage(url: matches.first.group(i)!, height: 10, width: 10));
         } else {
           links.add(matches.first.group(i)!);
         }
@@ -67,13 +76,12 @@ class PostComment {
       links: links,
       linksPreviews: [],
       author: Author.fromJson(json['author']),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at']),
     );
   }
 
   Future<List<LinkPreview>> getPreviews() async {
-    var a = links.map((url) =>
-        LinkPreview.getFromUrl(url)
-    );
+    var a = links.map((url) => LinkPreview.getFromUrl(url));
     return (await Future.wait(a)).whereType<LinkPreview>().toList();
   }
 }

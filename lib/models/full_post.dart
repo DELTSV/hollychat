@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hollychat/models/post.dart';
 import 'package:hollychat/models/post_comment.dart';
 
@@ -30,6 +31,7 @@ class FullPost extends Post {
       linksPreviews: post.linksPreviews,
       comments: (json['comments'] as List)
           .map((comment) => PostComment.fromJson(comment))
+          .sortedBy((comment) => comment.createdAt)
           .toList(),
     );
   }

@@ -21,7 +21,7 @@ class SettingsMenu extends StatelessWidget {
     required this.onItemSelected,
   });
 
-  final void Function(MenuItemType value) onItemSelected;
+  final void Function(MenuItemType value)? onItemSelected;
 
   List<PopupMenuItem<MenuItemType>> _buildItems() {
     const List<SettingsItem> items = [
@@ -62,6 +62,7 @@ class SettingsMenu extends StatelessWidget {
     return PopupMenuButton<MenuItemType>(
       iconColor: Colors.white,
       onSelected: onItemSelected,
+      enabled: onItemSelected != null,
       itemBuilder: (BuildContext context) {
         return _buildItems();
       },
