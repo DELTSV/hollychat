@@ -88,7 +88,7 @@ class PostCommentPreview extends StatelessWidget {
 
     var rootSpan = comment.content[0].startsWith("http") ?
     linkMessage(comment.content[0], spans) :
-    TextSpan(text: comment.content[0], style: const TextStyle(color: Colors.white, decoration: TextDecoration.none));
+    TextSpan(text: comment.content[0], style: const TextStyle(color: Colors.white, decoration: TextDecoration.none), children: spans);
 
     var previews = comment.linksPreviews.map((e) => PostLinkPreview(linkPreview: e,));
 

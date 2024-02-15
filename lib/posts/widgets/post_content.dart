@@ -46,7 +46,7 @@ class PostContent extends StatelessWidget {
 
     var rootSpan = content[0].startsWith("http") ?
     linkMessage(content[0], spans) :
-    TextSpan(text: content[0], style: const TextStyle(color: Colors.white, decoration: TextDecoration.none));
+    TextSpan(text: content[0], style: const TextStyle(color: Colors.white, decoration: TextDecoration.none), children: spans);
 
     var previews = linksPreviews.map((e) => PostLinkPreview(linkPreview: e,));
 

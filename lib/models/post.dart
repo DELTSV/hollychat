@@ -72,10 +72,10 @@ class Post {
     );
   }
 
-  Future<List<LinkPreview>> getPreviews() async {
+  void getPreviews() async {
     var a = links.map((url) =>
         LinkPreview.getFromUrl(url)
     );
-    return (await Future.wait(a)).whereType<LinkPreview>().toList();
+    linksPreviews = (await Future.wait(a)).whereType<LinkPreview>().toList();
   }
 }

@@ -24,10 +24,10 @@ class PostDetailsBloc extends Bloc<PostDetailsEvent, PostDetailsState> {
         final FullPost postDetails =
         await postsRepository.getPostDetailsById(event.postId);
 
-        postDetails.linksPreviews = await postDetails.getPreviews();
+        postDetails.getPreviews();
 
         for (var comment in postDetails.comments) {
-          comment.linksPreviews = await comment.getPreviews();
+          comment.getPreviews();
         }
 
         emit(state.copyWith(

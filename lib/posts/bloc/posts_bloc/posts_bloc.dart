@@ -26,8 +26,9 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
             .getAllPostsWithPagination(state.nextPage, numberOfPostsPerRequest);
 
         for(var post in newPosts) {
-          post.linksPreviews = await post.getPreviews();
+          post.getPreviews();
         }
+
 
         emit(state.copyWith(
           posts: [...state.posts, ...newPosts],
@@ -49,7 +50,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
           .getAllPostsWithPagination(1, numberOfPostsPerRequest);
 
       for(var post in newPosts) {
-        post.linksPreviews = await post.getPreviews();
+        post.getPreviews();
       }
 
       emit(state.copyWith(
