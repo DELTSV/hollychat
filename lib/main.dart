@@ -126,7 +126,10 @@ Route? _getRoute(RouteSettings settings) {
       return SignUpScreen.createRoute(settings);
   }
 
-  return null;
+  // redirect to home
+  return MaterialPageRoute(
+    builder: (context) => const PostsScreen(),
+  );
 }
 
 ThemeData _getTheme() {
