@@ -66,6 +66,47 @@ class _PostCommentPreviewState extends State<PostCommentPreview> {
     return user?.id == author.author.id;
   }
 
+  List<TextSpan> _getLinkSpans() {
+    var content = widget.comment.content;
+
+    return content
+        .getRange(1, content.length)
+        .map(
+          (text) => text.startsWith("http")
+              ? linkMessage(text, null)
+              : TextSpan(
+                  text: text,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+        )
+        .toList();
+  }
+
+  TextSpan _getRootSpan() {
+    var content = widget.comment.content;
+    var spans = _getLinkSpans();
+
+    return content[0].startsWith("http")
+        ? linkMessage(content[0], spans)
+        : TextSpan(
+            text: content[0],
+            style: const TextStyle(
+                color: Colors.white, decoration: TextDecoration.none),
+            children: spans,
+          );
+  }
+
+  Iterable<PostLinkPreview> _getPreviews() {
+    return widget.comment.linksPreviews.map(
+      (e) => PostLinkPreview(
+        linkPreview: e,
+      ),
+    );
+  }
+
   _getCommentContent() {
     if (_isEditing) {
       return Focus(
@@ -108,36 +149,14 @@ class _PostCommentPreviewState extends State<PostCommentPreview> {
       );
     }
 
-    var spans = widget.comment.content
-        .getRange(1, widget.comment.content.length)
-        .map((text) => text.startsWith("http")
-            ? linkMessage(text, null)
-            : TextSpan(
-                text: text,
-                style: const TextStyle(
-                    color: Colors.white, decoration: TextDecoration.none)))
-        .toList();
-
-    var rootSpan = widget.comment.content[0].startsWith("http")
-        ? linkMessage(widget.comment.content[0], spans)
-        : TextSpan(
-            text: widget.comment.content[0],
-            style: const TextStyle(
-                color: Colors.white, decoration: TextDecoration.none),
-            children: spans);
-
-    var previews = widget.comment.linksPreviews.map((e) => PostLinkPreview(
-          linkPreview: e,
-        ));
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RichText(text: rootSpan),
+        RichText(text: _getRootSpan()),
         ...widget.comment.imagesLinks.map((img) => ImageViewer(
               postImage: img,
             )),
-        ...previews
+        ..._getPreviews(),
       ],
     );
   }
