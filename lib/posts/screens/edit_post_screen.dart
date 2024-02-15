@@ -18,6 +18,31 @@ class EditPostScreen extends StatefulWidget {
 
   static const String routeName = "/edit-post";
 
+  static Route? createRoute(RouteSettings settings) {
+    final arguments = settings.arguments;
+    if (arguments is MinimalPost) {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => EditPostScreen(
+          post: arguments,
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1, 0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      );
+    }
+
+    return null;
+  }
+
   static void navigateTo(BuildContext context, MinimalPost post) {
     Navigator.of(context).pushNamed(routeName, arguments: post);
   }

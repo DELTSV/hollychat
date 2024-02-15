@@ -102,8 +102,6 @@ class HollyChatApp extends StatelessWidget {
           onGenerateRoute: _getRoute,
           routes: {
             PostsScreen.routeName: (context) => const PostsScreen(),
-            SignInScreen.routeName: (context) => const SignInScreen(),
-            SignUpScreen.routeName: (context) => const SignUpScreen(),
           },
           navigatorKey: navigatorKey,
         ),
@@ -115,98 +113,20 @@ class HollyChatApp extends StatelessWidget {
 Route? _getRoute(RouteSettings settings) {
   switch (settings.name) {
     case PostDetailsScreen.routeName:
-      final arguments = settings.arguments;
-      if (arguments is MinimalPost) {
-        return _createPostRoute(PostDetailsScreen(post: arguments));
-      }
-      break;
+      return PostDetailsScreen.createRoute(settings);
     case ImageScreen.routeName:
-      final arguments = settings.arguments;
-      if (arguments is Map) {
-        final tag = arguments['tag'] as UniqueKey;
-        final postImage = arguments['postImage'] as PostImage;
-        return _createImageRoute(ImageScreen(postImage: postImage, tag: tag));
-      }
-      break;
+      return ImageScreen.createRoute(settings);
     case AddPostScreen.routeName:
-      return _createAddPostRoute(const AddPostScreen());
+      return AddPostScreen.createRoute(settings);
     case EditPostScreen.routeName:
-      final arguments = settings.arguments;
-      if (arguments is MinimalPost) {
-        return _createEditPostRoute(
-          EditPostScreen(
-            post: arguments,
-          ),
-        );
-      }
-      break;
+      return EditPostScreen.createRoute(settings);
+    case SignInScreen.routeName:
+      return SignInScreen.createRoute(settings);
+    case SignUpScreen.routeName:
+      return SignUpScreen.createRoute(settings);
   }
 
   return null;
-}
-
-Route _createImageRoute(final Widget content) {
-  return PageRouteBuilder(
-    opaque: false,
-    barrierColor: Colors.white.withOpacity(0),
-    pageBuilder: (BuildContext context, _, __) {
-      return content;
-    },
-  );
-}
-
-Route _createEditPostRoute(final Widget content) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => content,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1, 0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
-
-Route _createAddPostRoute(final Widget content) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => content,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0, 1);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
-
-Route _createPostRoute(final Widget content) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => content,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }
 
 ThemeData _getTheme() {

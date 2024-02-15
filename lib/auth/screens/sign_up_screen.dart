@@ -12,6 +12,26 @@ class SignUpScreen extends StatelessWidget {
 
   static const routeName = '/sign-up';
 
+  static Route? createRoute(RouteSettings settings) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const SignUpScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0, 1);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
   void _onRegister(
       BuildContext context, String email, String username, String password) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
@@ -58,7 +78,8 @@ class SignUpScreen extends StatelessWidget {
                         Column(
                           children: [
                             RegisterForm(
-                              onSubmit: (email, username, password) => _onRegister(
+                              onSubmit: (email, username, password) =>
+                                  _onRegister(
                                 context,
                                 email,
                                 username,
@@ -72,7 +93,8 @@ class SignUpScreen extends StatelessWidget {
                                 const Text("Déjà inscrit ?"),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, SignInScreen.routeName);
+                                    Navigator.pushNamed(
+                                        context, SignInScreen.routeName);
                                   },
                                   child: const Text('Se connecter'),
                                 ),
