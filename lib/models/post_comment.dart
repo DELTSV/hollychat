@@ -13,6 +13,8 @@ class PostComment {
   List<LinkPreview> linksPreviews;
   final Author author;
 
+  String get relativeTime => formatRelativeTime(createdAt);
+
   PostComment({
     required this.id,
     required this.createdAt,
@@ -23,6 +25,25 @@ class PostComment {
     required this.linksPreviews,
     required this.author,
   });
+
+  String formatRelativeTime(DateTime? time) {
+    if (time == null) return "";
+
+    final now = DateTime.now();
+    final difference = now.difference(time);
+
+    if (difference.inSeconds < 60) {
+      return "${difference.inSeconds}s";
+    } else if (difference.inMinutes < 60) {
+      return "${difference.inMinutes}m";
+    } else if (difference.inHours < 24) {
+      return "${difference.inHours}h";
+    } else if (difference.inDays < 7) {
+      return "${difference.inDays}d";
+    } else {
+      return "${difference.inDays ~/ 7}w";
+    }
+  }
 
   factory PostComment.fromJson(Map<String, dynamic> json) {
     String text = json['content'];

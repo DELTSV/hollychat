@@ -76,6 +76,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   }
 
   void _onPostDeleted(BuildContext context) {
+    Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: AlertSuccess(message: "Post supprimé avec succès"),
@@ -295,6 +296,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                           children: [
                                             PostAuthor(
                                               author: state.postDetails!.author,
+                                              relativeTime:
+                                                  state.postDetails!.relativeTime,
                                             ),
                                             const SizedBox(height: 10),
                                             PostContent(

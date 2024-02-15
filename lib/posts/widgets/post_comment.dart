@@ -175,7 +175,7 @@ class _PostCommentPreviewState extends State<PostCommentPreview> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                PostAuthor(author: widget.comment.author),
+                PostAuthor(author: widget.comment.author, relativeTime: ""),
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     if (_isAuthor(state.user, widget.comment)) {
@@ -212,7 +212,10 @@ class _PostCommentPreviewState extends State<PostCommentPreview> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PostAuthor(author: widget.comment.author),
+              PostAuthor(
+                author: widget.comment.author,
+                relativeTime: widget.comment.relativeTime,
+              ),
               BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
                   if (_isAuthor(state.user, widget.comment)) {

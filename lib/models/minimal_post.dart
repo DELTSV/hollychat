@@ -13,6 +13,7 @@ class MinimalPost extends Post {
     required super.links,
     required super.linksPreviews,
     required this.commentsCount,
+    required super.createdAt,
   });
 
   factory MinimalPost.fromJson(Map<String, dynamic> json) {
@@ -27,6 +28,7 @@ class MinimalPost extends Post {
       linkImages: post.linkImages,
       links: post.links,
       linksPreviews: post.linksPreviews,
+      createdAt: post.createdAt,
       commentsCount: json['comments_count'],
     );
   }

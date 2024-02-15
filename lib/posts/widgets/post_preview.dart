@@ -59,7 +59,7 @@ class PostPreview extends StatelessWidget {
 
   _getPostHeader(BuildContext context, bool isAuthor) {
     if (!isAuthor) {
-      return PostAuthor(author: post.author);
+      return PostAuthor(author: post.author, relativeTime: post.relativeTime);
     }
 
     return BlocListener<DeletePostBloc, DeletePostState>(
@@ -72,7 +72,7 @@ class PostPreview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          PostAuthor(author: post.author),
+          PostAuthor(author: post.author, relativeTime: post.relativeTime),
           SettingsMenu(
             onItemSelected: (itemType) => _onItemSelected(itemType, context),
           ),

@@ -15,6 +15,7 @@ class FullPost extends Post {
     required super.links,
     required super.linksPreviews,
     required this.comments,
+    required super.createdAt,
   });
 
   factory FullPost.fromJson(Map<String, dynamic> json) {
@@ -29,6 +30,7 @@ class FullPost extends Post {
       linkImages: post.linkImages,
       links: post.links,
       linksPreviews: post.linksPreviews,
+      createdAt: post.createdAt,
       comments: (json['comments'] as List)
           .map((comment) => PostComment.fromJson(comment))
           .sortedBy((comment) => comment.createdAt)

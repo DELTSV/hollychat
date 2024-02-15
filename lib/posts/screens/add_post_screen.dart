@@ -96,11 +96,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
             listener: (context, state) {
               if (state.status == PostStatus.success) {
                 Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: AlertSuccess(message: "Post ajouté avec succès"),
-                  ),
-                );
               }
             },
             child: SafeArea(
