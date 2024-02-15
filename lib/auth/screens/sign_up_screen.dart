@@ -62,48 +62,46 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
             body: SingleChildScrollView(
-              child: Expanded(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const SizedBox(height: 30),
-                        const Image(
-                          image: AssetImage('assets/images/logo.png'),
-                          height: 35,
-                        ),
-                        const SizedBox(height: 20),
-                        Column(
-                          children: [
-                            RegisterForm(
-                              onSubmit: (email, username, password) =>
-                                  _onRegister(
-                                context,
-                                email,
-                                username,
-                                password,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(height: 30),
+                      const Image(
+                        image: AssetImage('assets/images/logo.png'),
+                        height: 35,
+                      ),
+                      const SizedBox(height: 20),
+                      Column(
+                        children: [
+                          RegisterForm(
+                            onSubmit: (email, username, password) =>
+                                _onRegister(
+                              context,
+                              email,
+                              username,
+                              password,
+                            ),
+                            isLoading: state.status == AuthStatus.loading,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Déjà inscrit ?"),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, SignInScreen.routeName);
+                                },
+                                child: const Text('Se connecter'),
                               ),
-                              isLoading: state.status == AuthStatus.loading,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text("Déjà inscrit ?"),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, SignInScreen.routeName);
-                                  },
-                                  child: const Text('Se connecter'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
