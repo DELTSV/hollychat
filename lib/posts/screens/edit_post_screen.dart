@@ -111,8 +111,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
     );
   }
 
-  _getEditButton() {
-    bool canEdit = _canEditPost();
+  _getEditButton(bool isLoading) {
+    bool canEdit = _canEditPost() && !isLoading;
 
     return IconButton(
       onPressed: canEdit ? _editPost : null,
@@ -163,7 +163,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.close),
             ),
-            actions: [_getEditButton()],
+            actions: [_getEditButton(state.status == PostStatus.loading)],
             title: Text(
               'Editer le post',
               style: Theme.of(context).textTheme.titleLarge,
