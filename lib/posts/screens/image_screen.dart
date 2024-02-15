@@ -18,18 +18,10 @@ class ImageScreen extends StatefulWidget {
       final tag = arguments['tag'] as UniqueKey;
       final postImage = arguments['postImage'] as PostImage;
       return PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => ImageScreen(postImage: postImage, tag: tag),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0, 1);
-          const end = Offset.zero;
-          const curve = Curves.ease;
-
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
+        opaque: false,
+        barrierColor: Colors.white.withOpacity(0),
+        pageBuilder: (BuildContext context, _, __) {
+          return ImageScreen(postImage: postImage, tag: tag);
         },
       );
     }

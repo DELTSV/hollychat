@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/posts/widgets/post_form.dart';
+import 'package:hollychat/posts/widgets/success_alert.dart';
 
 import '../bloc/post_bloc/post_bloc.dart';
 import '../widgets/linear_progress_bar.dart';
@@ -59,8 +60,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     return _content.isNotEmpty;
   }
 
-  IconButton getSendButton() {
-    bool canSend = canSendPost();
+  IconButton getSendButton(isLoading) {
+    bool canSend = canSendPost() && !isLoading;
 
     return IconButton(
       onPressed: canSend ? _onSendPost : null,
@@ -85,7 +86,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             bottom: LinearProgressBar(
               isLoading: state.status == PostStatus.loading,
             ),
-            actions: [getSendButton()],
+            actions: [getSendButton(state.status == PostStatus.loading)],
             title: Text(
               'Nouveau post',
               style: Theme.of(context).textTheme.titleLarge,
@@ -95,6 +96,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
             listener: (context, state) {
               if (state.status == PostStatus.success) {
                 Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: AlertSuccess(message: "Post ajouté avec succès"),
+                  ),
+                );
               }
             },
             child: SafeArea(

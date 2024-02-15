@@ -16,7 +16,9 @@ class LinearProgressBar extends StatelessWidget implements PreferredSizeWidget {
 
     return LinearProgressIndicator(
       value: null,
-      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+      valueColor: const AlwaysStoppedAnimation<Color>(
+        Color(0xff4ade80),
+      ),
       backgroundColor: Colors.grey[300],
     );
   }

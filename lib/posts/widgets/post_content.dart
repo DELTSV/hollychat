@@ -83,9 +83,11 @@ class PostContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RichText(text: _getRootSpan()),
-        ...linkImages.map((img) => ImageViewer(
-              postImage: img,
-            )),
+        ...linkImages.map(
+          (img) => ImageViewer(
+            postImage: img,
+          ),
+        ),
         if (image != null) ...[
           const SizedBox(height: 10),
           ImageViewer(

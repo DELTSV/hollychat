@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hollychat/auth/bloc/auth_bloc.dart';
 import 'package:hollychat/posts/bloc/comment_bloc/comment_bloc.dart';
 import 'package:hollychat/posts/bloc/post_bloc/post_bloc.dart';
+import 'package:hollychat/posts/widgets/alert_error.dart';
 import 'package:hollychat/posts/widgets/post_comment_list.dart';
 import 'package:hollychat/posts/widgets/post_separator.dart';
 
@@ -16,6 +17,7 @@ import '../widgets/post_author.dart';
 import '../widgets/post_comment_field.dart';
 import '../widgets/post_content.dart';
 import '../widgets/settings_menu.dart';
+import '../widgets/success_alert.dart';
 import 'edit_post_screen.dart';
 
 class PostDetailsScreen extends StatefulWidget {
@@ -74,7 +76,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   }
 
   void _onPostDeleted(BuildContext context) {
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: AlertSuccess(message: "Post supprimé avec succès"),
+      ),
+    );
   }
 
   void _onCommentAdded(BuildContext context) {
@@ -167,12 +173,34 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             if (state.status == DeletePostStatus.success) {
               _onPostDeleted(context);
             }
+
+            if (state.status == DeletePostStatus.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: AlertError(message: "Erreur lors de la suppression du post"),
+                ),
+              );
+            }
           },
         ),
         BlocListener<PostBloc, PostState>(
           listener: (context, state) {
             if (state.status == PostStatus.success) {
               _getPost();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: AlertSuccess(message: "Post modifié avec succès"),
+                ),
+              );
+            }
+
+            if (state.status == PostStatus.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: AlertError(message: "Erreur lors de la modification du post"),
+                ),
+              );
             }
           },
         ),
@@ -180,6 +208,14 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           listener: (context, state) {
             if (state.status == CommentStatus.success) {
               _onCommentAdded(context);
+            }
+
+            if (state.status == CommentStatus.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: AlertError(message: "Erreur lors de l'ajout du commentaire"),
+                ),
+              );
             }
           },
         ),

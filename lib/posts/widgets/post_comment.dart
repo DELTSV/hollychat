@@ -123,7 +123,8 @@ class _PostCommentPreviewState extends State<PostCommentPreview> {
           autocorrect: true,
           maxLines: null,
           decoration: InputDecoration(
-            hintText: 'Edit comment',
+            hintText: 'Éditer le commentaire',
+            border: InputBorder.none,
             hintStyle: TextStyle(
               color: Colors.grey[500],
             ),
