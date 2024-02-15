@@ -7,6 +7,7 @@ import 'package:hollychat/posts/widgets/delete_alert_dialog.dart';
 import 'package:hollychat/posts/widgets/post_author.dart';
 import 'package:hollychat/posts/widgets/post_content.dart';
 import 'package:hollychat/posts/widgets/settings_menu.dart';
+import 'package:hollychat/posts/widgets/success_alert.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 import '../../models/user.dart';
@@ -34,6 +35,7 @@ class PostPreview extends StatelessWidget {
   }
 
   _onDeletePost(BuildContext context) {
+    Navigator.of(context).pop();
     BlocProvider.of<DeletePostBloc>(context).add(
       DeletePost(
         id: post.id,
@@ -42,7 +44,11 @@ class PostPreview extends StatelessWidget {
   }
 
   void _onPostDeleted(BuildContext context) {
-    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: AlertSuccess(message: "Post supprimé avec succès"),
+      ),
+    );
   }
 
   showAlertDialog(BuildContext context) {

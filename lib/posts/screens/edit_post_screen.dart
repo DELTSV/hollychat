@@ -175,7 +175,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
           body: BlocListener<PostBloc, PostState>(
             listener: (context, state) {
               if (state.status == PostStatus.success) {
-                Navigator.of(context).pop();
+                if (ModalRoute.of(context)?.isCurrent ?? false) {
+                  Navigator.of(context).pop();
+                }
               }
             },
             child: SafeArea(

@@ -71,12 +71,15 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   }
 
   void _onDeletePost(BuildContext context) {
+    Navigator.of(context).pop();
     final deletePostBloc = BlocProvider.of<DeletePostBloc>(context);
     deletePostBloc.add(DeletePost(id: widget.post.id));
   }
 
   void _onPostDeleted(BuildContext context) {
-    Navigator.of(context).pop();
+    if (ModalRoute.of(context)?.isCurrent ?? false) {
+      Navigator.of(context).pop();
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: AlertSuccess(message: "Post supprimé avec succès"),

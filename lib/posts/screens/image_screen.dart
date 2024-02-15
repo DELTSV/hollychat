@@ -143,7 +143,9 @@ class _ImageScreenState extends State<ImageScreen>
     }
 
     if (_positionYDelta > _disposeLimit || _positionYDelta < -_disposeLimit) {
-      Navigator.of(context).pop();
+      if (ModalRoute.of(context)?.isCurrent ?? false) {
+        Navigator.of(context).pop();
+      }
     } else {
       setState(() {
         _animationDuration = const Duration(milliseconds: 300);
@@ -244,9 +246,7 @@ class _ImageScreenState extends State<ImageScreen>
                 child: IconButton.filled(
                   icon: const Icon(Icons.arrow_back),
                   color: Colors.white,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
             ),

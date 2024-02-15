@@ -95,7 +95,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
           body: BlocListener<PostBloc, PostState>(
             listener: (context, state) {
               if (state.status == PostStatus.success) {
-                Navigator.of(context).pop();
+                if (ModalRoute.of(context)?.isCurrent ?? false) {
+                  Navigator.of(context).pop();
+                }
               }
             },
             child: SafeArea(

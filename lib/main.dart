@@ -21,8 +21,6 @@ import 'package:hollychat/posts/services/posts/posts_api_data_source.dart';
 import 'package:hollychat/posts/services/posts/posts_repository.dart';
 
 import 'auth/screens/sign_up_screen.dart';
-import 'models/minimal_post.dart';
-import 'models/post_image.dart';
 
 void main() {
   runApp(const HollyChatApp());
