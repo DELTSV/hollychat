@@ -92,6 +92,8 @@ class PostCommentPreview extends StatelessWidget {
 
     var previews = comment.linksPreviews.map((e) => PostLinkPreview(linkPreview: e,));
 
+    print(previews);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(

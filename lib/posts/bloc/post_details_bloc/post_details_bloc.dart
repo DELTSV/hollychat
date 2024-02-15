@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hollychat/models/full_post.dart';
 
@@ -24,10 +25,11 @@ class PostDetailsBloc extends Bloc<PostDetailsEvent, PostDetailsState> {
         final FullPost postDetails =
         await postsRepository.getPostDetailsById(event.postId);
 
-        postDetails.getPreviews();
+        postDetails.linksPreviews = await postDetails.getPreviews();
 
-        for (var comment in postDetails.comments) {
-          comment.getPreviews();
+        var commentPreviews = await Future.wait(postDetails.comments.map((e) => e.getPreviews()));
+        for (var i = 0; i < commentPreviews.length; ++i) {
+          postDetails.comments[i].linksPreviews = commentPreviews[i];
         }
 
         emit(state.copyWith(
